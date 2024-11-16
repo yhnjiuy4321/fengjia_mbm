@@ -32,7 +32,7 @@ const goToVenueTour = () => {
       <div class="col-12 col-md-6 col-lg-2 d-flex mt-4">
         <div class="card">
           <h5 class="card-title text-center">場館導覽</h5>
-          <div class="cover">
+          <div class="cover" @click="goToVenueTour">
             <img src="https://picsum.photos/400/600" class="card-img-top rounded-0" alt="...">
           </div>
         </div>
@@ -73,7 +73,7 @@ const goToVenueTour = () => {
       <div class="col-12 col-md-6 col-lg-2 d-flex mt-4">
         <div class="card">
           <h5 class="card-title text-center">最新消息</h5>
-          <div class="cover">
+          <div class="cover" @click="goToNews">
             <img src="https://picsum.photos/400/600" class="card-img-top rounded-0" alt="...">
           </div>
         </div>

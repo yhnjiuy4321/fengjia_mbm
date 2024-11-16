@@ -4,7 +4,7 @@
 <template>
   <header class="header">
       <img src="../assets/logo.svg" alt="logo" />
-    <div class="site-name">
+    <div class="site-name" @click=gohome()>
      <span class="chineseName  text-center">逢甲海洋生物博物館</span>
       <span class="engName  text-center">Feng Chia Marine Biology Museum</span>
     </div>
@@ -84,5 +84,13 @@
 </style>
 
 <script>
+
+export default {
+  methods: {
+    gohome() {
+      this.$router.push("/homepage");
+    },
+  },
+};
 
 </script>

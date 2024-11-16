@@ -1,5 +1,11 @@
 <script setup>
+import pagehead from '@/components/header.vue'
+import pagefooter from '@/components/footer.vue'
+import carouselComponent from '@/components/carousel.vue'
+
 import menuComponent from '@/components/menu.vue'
+
+window.scrollTo(0,0);//來到此頁面時，將滾動條移動到最上方
 
 const toAquarium = () => {
   document.querySelector('.Aquarium_question').style.display = 'block'
@@ -13,6 +19,9 @@ const tobio = () => {
 </script>
 
 <template>
+
+<pagehead/>
+<carouselComponent/>
 
   <div class="d-flex mt-5">
     <menuComponent/>
@@ -103,6 +112,8 @@ const tobio = () => {
 
     </div>
   </div>
+
+  <pagefooter/>
 
 </template>
 

@@ -1,0 +1,67 @@
+<script setup>
+
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const goToTicket = () => {
+  router.push('/backend/login/ticketManagement')
+}
+
+const goToStaff = () => {
+  router.push('/backend/login/staffManagement')
+}
+</script>
+
+<template>
+  <nav class="navbar navbar-expand-sm bg-black">
+
+    <div class="container-fluid">
+      <!-- Links -->
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="#" @click="goToTicket">票務管理</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" @click="goToStaff">人員管理</a>
+        </li>
+      </ul>
+
+      <!-- Logout -->
+      <div class="d-flex justify-content-end">
+        <button class="btn_logout" @click="logout" data-bs-toggle="tooltip" title="登出"><i class="fas fa-sign-out-alt"></i></button>
+      </div>
+    </div>
+
+  </nav>
+</template>
+
+<style scoped>
+nav {
+  margin-top: 55px;
+  position: fixed; /* 固定在網頁最上方 */
+  z-index: 1000; /* 確保在其他元素之上 */
+  top: 0;
+  width: 100%; /* 佔滿整個寬度 */
+}
+
+.nav-link {
+  color: #ffffff;
+}
+
+
+
+.nav-item:hover .nav-link {
+  color: #ffd500;
+  background: rgba(119, 178, 239, 0.5);
+}
+
+.btn_logout {
+  background-color: #000000;
+  color: #ffffff;
+  border: none;
+  margin: 3px;
+  font-size: 20px;
+  cursor: pointer;
+}
+</style>
