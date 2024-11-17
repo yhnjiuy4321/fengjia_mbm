@@ -16,6 +16,13 @@ const tobio = () => {
   document.querySelector('.Aquarium_question').style.display = 'none'
   document.querySelector('.bio_question').style.display = 'block'
 }
+
+import { Qa_venue } from '@/data/qaContent.js';
+import { Qa_bio } from '@/data/qaContent.js';
+import {ref} from "vue";
+const questions_venue = ref(Qa_venue);
+const questions_bio = ref(Qa_bio);
+
 </script>
 
 <template>
@@ -40,72 +47,26 @@ const tobio = () => {
       </div>
 
 
+      <!--場館問題-->
       <div class="Aquarium_question">
-        <div class="question_content  w-100 p-2">
+        <div v-for="item in questions_venue" :key="item.id" class="question_content  w-100 p-2">
           <div class="question">
-            <h2>問題一</h2>
+            <h2>Q:{{item.question}}</h2>
           </div>
           <div class="answer">
-            <p class="text-end"> 這是問題一的內容</p>
-          </div>
-        </div>
-        <div class="question_content  w-100 p-2">
-          <div class="question">
-            <h2>問題一</h2>
-          </div>
-          <div class="answer">
-            <p class="text-end"> 這是問題一的內容</p>
-          </div>
-        </div>
-        <div class="question_content  w-100 p-2">
-          <div class="question">
-            <h2>問題一</h2>
-          </div>
-          <div class="answer">
-            <p class="text-end"> 這是問題一的內容</p>
-          </div>
-        </div>
-        <div class="question_content  w-100 p-2">
-          <div class="question">
-            <h2>問題一</h2>
-          </div>
-          <div class="answer">
-            <p class="text-end"> 這是問題一的內容</p>
+            <p class="text-end">A:{{item.answer}}</p>
           </div>
         </div>
       </div>
 
+      <!--生物問題-->
       <div class="bio_question">
-        <div class="question_content  w-100 p-2">
+        <div v-for="item in questions_bio" :key="item.id"  class="question_content  w-100 p-2">
           <div class="question">
-            <h2>Ｑ：海生館的海豚一斤多少錢？</h2>
+            <h2>Q:{{item.question}}</h2>
           </div>
           <div class="answer">
-            <p class="text-end">Ａ：海豚是非賣品喔謝謝！</p>
-          </div>
-        </div>
-        <div class="question_content  w-100 p-2">
-          <div class="question">
-            <h2>問題一</h2>
-          </div>
-          <div class="answer">
-            <p class="text-end"> 這是問題一的內容</p>
-          </div>
-        </div>
-        <div class="question_content  w-100 p-2">
-          <div class="question">
-            <h2>問題一</h2>
-          </div>
-          <div class="answer">
-            <p class="text-end"> 這是問題一的內容</p>
-          </div>
-        </div>
-        <div class="question_content  w-100 p-2">
-          <div class="question">
-            <h2>問題一</h2>
-          </div>
-          <div class="answer">
-            <p class="text-end"> 這是問題一的內容</p>
+            <p class="text-end">A:{{item.answer}}</p>
           </div>
         </div>
       </div>

@@ -1,6 +1,25 @@
 <script setup>
-import b_header from '@/components/b_header.vue'
-import b_menu from '@/components/b_menuBar.vue'
+import { ref, onMounted } from 'vue';
+import b_header from '@/components/b_header.vue';
+import b_menu from '@/components/b_menuBar.vue';
+import axios from 'axios';
+
+const staffs = ref([]);
+
+async function fetchStaffs() {
+  try {
+    const response = await axios.get('http://localhost:5000/api/data/member');
+    staffs.value = response.data;
+  } catch (error) {
+    console.error('Error fetching staff data:', error);
+  }
+}
+
+onMounted(() => {
+  fetchStaffs();
+});
+
+
 </script>
 
 <template>
@@ -45,52 +64,14 @@ import b_menu from '@/components/b_menuBar.vue'
           <th>到職日期</th>
           <th>操作</th>
         </tr>
-        <tr>
-          <td>EMP001</td>
-          <td>王小明</td>
-          <td>男</td>
-          <td>xming@example.com</td>
-          <td>0912345678</td>
-          <td>2023-01-15</td>
-          <td><button>編輯</button> <button>刪除</button></td>
+        <tr v-for="staff in staffs" :key="staff._id">
+          <td>{{ staff.employeeId }}</td>
+          <td>{{ staff.name }}</td>
+          <td>{{ staff.gender }}</td>
+          <td>{{ staff.email }}</td>
+          <td>{{ staff.phone }}</td>
+          <td>{{ new Date(staff.hireDate).toLocaleDateString() }}</td>
         </tr>
-        <tr>
-          <td>EMP002</td>
-          <td>李美麗</td>
-          <td>女</td>
-          <td>mllee@example.com</td>
-          <td>0987654321</td>
-          <td>2022-08-10</td>
-          <td><button>編輯</button> <button>刪除</button></td>
-        </tr>
-        <tr>
-          <td>EMP003</td>
-          <td>陳大志</td>
-          <td>男</td>
-          <td>dzchen@example.com</td>
-          <td>0933221100</td>
-          <td>2023-05-20</td>
-          <td><button>編輯</button> <button>刪除</button></td>
-        </tr>
-        <tr>
-          <td>EMP004</td>
-          <td>林佳宜</td>
-          <td>女</td>
-          <td>jylin@example.com</td>
-          <td>0922113344</td>
-          <td>2021-11-05</td>
-          <td><button>編輯</button> <button>刪除</button></td>
-        </tr>
-        <tr>
-          <td>EMP005</td>
-          <td>張建國</td>
-          <td>男</td>
-          <td>jguo@example.com</td>
-          <td>0911002233</td>
-          <td>2020-07-18</td>
-          <td><button>編輯</button> <button>刪除</button></td>
-        </tr>
-
       </table>
     </div>
   </div>

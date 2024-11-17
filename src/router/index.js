@@ -41,7 +41,7 @@ const routes = [
         component: Article
     },
     {
-        path: '/homepage/venueTour',
+        path: '/homepage/venueTourContent',
         name: '場館導覽',
         component: VenueTour
     },
@@ -74,5 +74,7 @@ const router = createRouter({
     history: createWebHistory(),
     routes
 });
+
+
 
 export default router;

@@ -13,6 +13,7 @@ import menuComponent from '@/components/menu.vue'
     <menuComponent/>
     <div class="container w-100 p-5 d-grid">
 
+
       <div class="rule">
 
         <div class="title">
@@ -36,6 +37,7 @@ import menuComponent from '@/components/menu.vue'
           <p>14. 請勿在本館內使用煙霧彈。</p>
         </div>
       </div>
+
 
       <div class="service">
 
