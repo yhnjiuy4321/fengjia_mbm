@@ -5,10 +5,20 @@ import carouselComponent from '@/components/carousel.vue'
 import menuComponent from '@/components/menu.vue'
 import router from "@/router/index.js";
 
-const goToArticle = () => {
+const goToArticle = (id) => {
   console.log('go to article')
-  router.push('/homepage/News/article')
+  router.push(`/homepage/News/article/${id}`)
 }
+
+import {ref} from "vue";
+import { newsContent } from '../data/newsContent.js'
+import { venusContent } from '../data/newsContent.js'
+const forNews = ref(newsContent)
+const forVenus = ref(venusContent)
+
+//反轉陣列(時間由新到舊)
+//forNews.value.reverse()
+//forVenus.value.reverse()
 
 window.scrollTo(0,0);//來到此頁面時，將滾動條移動到最上方
 </script>
@@ -37,6 +47,8 @@ window.scrollTo(0,0);//來到此頁面時，將滾動條移動到最上方
 
       <!-- 選項卡內容 -->
       <div class="tab-content" id="myTabContent">
+
+        <!--場館資訊-->
         <div class="tab-pane fade show active" id="field" role="tabpanel" aria-labelledby="field-tab">
           <div class="content">
             <table class="table table-striped w-100">
@@ -46,36 +58,12 @@ window.scrollTo(0,0);//來到此頁面時，將滾動條移動到最上方
                 <td class="article">內容</td>
               </tr>
               </thead>
-              <tbody>
+              <tbody v-for="item in forVenus" :key="item.id">
               <tr>
-                <td>2021/10/01</td>
+                <td>{{item.date}}</td>
                 <td>
-                  <a @click="goToArticle">海龜復育計畫進展：成功釋放三隻稀有保育類海龜回歸大海</a>
+                  <a @click="goToArticle(item.id)">{{item.title}}</a>
                 </td>
-              </tr>
-              <tr>
-                <td>2021/10/02</td>
-                <td>場館將於10/10開放</td>
-              </tr>
-              <tr>
-                <td>2021/10/03</td>
-                <td>場館將於10/10開放</td>
-              </tr>
-              <tr>
-                <td>2021/10/03</td>
-                <td>場館將於10/10開放</td>
-              </tr>
-              <tr>
-                <td>2021/10/03</td>
-                <td>場館將於10/10開放</td>
-              </tr>
-              <tr>
-                <td>2021/10/03</td>
-                <td>場館將於10/10開放</td>
-              </tr>
-              <tr>
-                <td>2021/10/03</td>
-                <td>場館將於10/10開放</td>
               </tr>
               </tbody>
             </table>
@@ -91,34 +79,12 @@ window.scrollTo(0,0);//來到此頁面時，將滾動條移動到最上方
                 <td class="article">內容</td>
               </tr>
               </thead>
-              <tbody>
+              <tbody v-for="item in forNews" :key="item.id">
               <tr>
-                <td>2021/10/01</td>
-                <td>場館將於10/10開放場館將於10/10開放場館將於10/10開放場館將於10/10開放場館將於10/10開放</td>
-              </tr>
-              <tr>
-                <td>2021/10/02</td>
-                <td>場館將於10/10開放</td>
-              </tr>
-              <tr>
-                <td>2021/10/03</td>
-                <td>場館將於10/10開放</td>
-              </tr>
-              <tr>
-                <td>2021/10/03</td>
-                <td>場館將於10/10開放</td>
-              </tr>
-              <tr>
-                <td>2021/10/03</td>
-                <td>場館將於10/10開放</td>
-              </tr>
-              <tr>
-                <td>2021/10/03</td>
-                <td>場館將於10/10開放</td>
-              </tr>
-              <tr>
-                <td>2021/10/03</td>
-                <td>場館將於10/10開放</td>
+                <td>{{item.date}}</td>
+                <td>
+                  <a @click="goToArticle(item.id)">{{item.title}}</a>
+                </td>
               </tr>
               </tbody>
             </table>

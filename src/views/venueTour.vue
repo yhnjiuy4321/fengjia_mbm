@@ -3,6 +3,22 @@ import pagehead from '@/components/header.vue'
 import pagefooter from '@/components/footer.vue'
 import carouselComponent from '@/components/carousel.vue'
 import menuComponent from '@/components/menu.vue'
+
+import {ref} from "vue";
+import { introContent } from '../data/venueTourContent/introContent.js'
+import { deepSeaContent } from '../data/venueTourContent/deepContent.js'
+import { shallowContent } from '../data/venueTourContent/shallowContent.js'
+import { iceContent } from '../data/venueTourContent/iceContent.js'
+import { whaleContent } from '../data/venueTourContent/whaleContent.js'
+
+const forIntro = ref(introContent)
+const forDeep = ref(deepSeaContent)
+const forShallow = ref(shallowContent)
+const forIce = ref(iceContent)
+const forWhale = ref(whaleContent)
+
+
+
 </script>
 
 <template>
@@ -37,255 +53,151 @@ import menuComponent from '@/components/menu.vue'
 
       <!--導覽簡介-->
       <div class="tab-content p-3" id="myTabContent">
-        <div class="tab-pane fade show active" id="tour" role="tabpanel" aria-labelledby="tour-tab">
+        <div v-for="intro in forIntro" class="tab-pane fade show active" id="tour" role="tabpanel"
+             aria-labelledby="tour-tab">
 
           <div class="content">
 
             <div class="Introduction">
-              <a>　　本館展區共分為四大類型，分別是淺海區、深海區、極地世界及鯨魚世界。淺海區展示了豐富多樣的珊瑚礁生態，讓您深入了解熱帶魚類和珊瑚共生的奇妙環境；深海區則帶您探索黑暗而神秘的深海生物，讓人見識到光源稀少的深海奇景；極地世界專注於極地動物的生態，並展示其為了適應寒冷環境所發展的特殊技能；最後，鯨魚世界帶您了解海洋中的巨型生物——鯨魚，介紹其生活習性及保育意識。希望每位參觀者在旅程中增長知識，親身感受到海洋生態的多樣與美麗。</a>
+              <a>{{ intro.Preface }}</a>
             </div>
 
             <div class="Main Body mt-5">
 
-              <div class="deepInfo">
+              <div v-for="deepItem in intro.deep" class="deepInfo">
                 <div class="infoName">
-                  <h2>深海區</h2>
+                  <h2>{{ deepItem.name }}</h2>
                 </div>
                 <div class="infoContent">
-                  <img src="https://picsum.photos/300/100" class="w-100 h-50 pb-3 ">
-                  <p>　　深海區是海洋中最神秘的地方，這裡光線稀少，溫度低，壓力高，生物種類繁多，且多數生物體型龐大。深海區展示了深海生物的特殊生理結構和生活習性，讓您了解這些生物如何適應極端環境，並探索深海生物的奇幻世界。</p>
-                <div>
-                </div>
-              </div>
-            </div>
-
-
-            <div class="shallow mt-5">
-              <div class="infoName mt-3">
-                <h2>淺海區</h2>
-              </div>
-              <div class="infoContent">
-                <img src="https://picsum.photos/300/100" class="w-100 h-50 pb-3 ">
-                <p>　　淺海區展示了多樣化的珊瑚礁生態系統，這裡的生物在陽光充足的淺海環境中繁衍生息，形成了極為繽紛的海洋世界。展區內包含色彩繽紛的熱帶魚類、珊瑚及其他無脊椎動物，讓參觀者能近距離觀察海洋生態的和諧共存。透過互動展示和動態影像，您可以了解珊瑚的形成過程、生態平衡的重要性以及保護珊瑚礁的迫切性。希望您能在此展區體驗淺海世界的奇妙與美麗，並增強對海洋保護的認識。</p>
-                <div>
-                </div>
-              </div>
-            </div>
-
-              <div class="ice mt-5">
-                <div class="infoName mt-3">
-                  <h2>極地世界</h2>
-                </div>
-                <div class="infoContent">
-                  <img src="https://picsum.photos/300/100" class="w-100 h-50 pb-3 ">
-                  <p>　　淺海區展示了多樣化的珊瑚礁生態系統，這裡的生物在陽光充足的淺海環境中繁衍生息，形成了極為繽紛的海洋世界。展區內包含色彩繽紛的熱帶魚類、珊瑚及其他無脊椎動物，讓參觀者能近距離觀察海洋生態的和諧共存。透過互動展示和動態影像，您可以了解珊瑚的形成過程、生態平衡的重要性以及保護珊瑚礁的迫切性。希望您能在此展區體驗淺海世界的奇妙與美麗，並增強對海洋保護的認識。</p>
-                  <div>
+                  <div class="w-100 h-50 pb-3 ">
+                    <img :src="deepItem.photo" alt="...">
                   </div>
+                  <p>{{ deepItem.content }}</p>
                 </div>
               </div>
 
-              <div class="whale mt-5">
-                <div class="infoName mt-3">
-                  <h2>鯨魚世界</h2>
+              <div v-for="shallowItem in intro.shallow" class="shallowInfo mt-5">
+                <div class="infoName">
+                  <h2>{{ shallowItem.name }}</h2>
                 </div>
                 <div class="infoContent">
-                  <img src="https://picsum.photos/300/100" class="w-100 h-50 pb-3 ">
-                  <p>　　淺海區展示了多樣化的珊瑚礁生態系統，這裡的生物在陽光充足的淺海環境中繁衍生息，形成了極為繽紛的海洋世界。展區內包含色彩繽紛的熱帶魚類、珊瑚及其他無脊椎動物，讓參觀者能近距離觀察海洋生態的和諧共存。透過互動展示和動態影像，您可以了解珊瑚的形成過程、生態平衡的重要性以及保護珊瑚礁的迫切性。希望您能在此展區體驗淺海世界的奇妙與美麗，並增強對海洋保護的認識。</p>
-                  <div>
+                  <div class="w-100 h-50 pb-3 ">
+                    <img :src="shallowItem.photo" alt="...">
                   </div>
+                  <p>{{ shallowItem.content }}</p>
+                </div>
+              </div>
+
+              <div v-for="iceItem in intro.ice" class="iceInfo mt-5">
+                <div class="infoName">
+                  <h2>{{ iceItem.name }}</h2>
+                </div>
+                <div class="infoContent">
+                  <div class="w-100 h-50 pb-3 ">
+                    <img :src="iceItem.photo" alt="...">
+                  </div>
+                  <p>{{ iceItem.content }}</p>
+                </div>
+              </div>
+
+              <div v-for="whaleItem in intro.whale" class="whaleInfo mt-5">
+                <div class="infoName">
+                  <h2>{{ whaleItem.name }}</h2>
+                </div>
+                <div class="infoContent">
+                  <div class="w-100 h-50 pb-3 ">
+                    <img :src="whaleItem.photo" alt="...">
+                  </div>
+                  <p>{{ whaleItem.content }}</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="tab-pane fade" id="deep" role="tabpanel" aria-labelledby="deep-tab">
+
+        <!--深海區-->
+        <div  class="tab-pane fade" id="deep" role="tabpanel" aria-labelledby="deep-tab">
           <div class="content">
             <div class="row">
-
-              <div class="col-md-6 mb-4 w-100">
+              <div v-for="deepItem in forDeep" :key="deepItem.id" class="col-md-6 mb-4 w-100">
                 <div class="d-flex border p-3 rounded">
-                  <img src="https://picsum.photos/200/200" alt="小丑魚" class="rounded me-3 w-50 h-50" >
+                  <img :src="deepItem.photo" alt="深海區" class="rounded me-3 w-50 h-50">
                   <div>
-                    <h5>名稱：小丑魚</h5>
-                    <p>學名：Amphiprioninae</p>
-                    <p>
-                      簡介：小丑魚是一種色彩鮮豔的海水魚，常見於印度洋和西太平洋的熱帶珊瑚礁。他們以與海葵的共生關係聞名，利用特殊的黏液避免被海葵的毒素刺傷，藉此獲得掠食者的保護。小丑魚體型小巧，通常呈橙白相間的條紋，性格活潑。
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-6 mb-4 w-100">
-                <div class="d-flex border p-3 rounded">
-                  <img src="https://picsum.photos/200/200" alt="小丑魚" class="rounded me-3 w-50 h-50" >
-                  <div>
-                    <h5>名稱：小丑魚</h5>
-                    <p>學名：Amphiprioninae</p>
-                    <p>
-                      簡介：小丑魚是一種色彩鮮豔的海水魚，常見於印度洋和西太平洋的熱帶珊瑚礁。他們以與海葵的共生關係聞名，利用特殊的黏液避免被海葵的毒素刺傷，藉此獲得掠食者的保護。小丑魚體型小巧，通常呈橙白相間的條紋，性格活潑。
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-6 mb-4 w-100">
-                <div class="d-flex border p-3 rounded">
-                  <img src="https://picsum.photos/200/200" alt="小丑魚" class="rounded me-3 w-50 h-50" >
-                  <div>
-                    <h5>名稱：小丑魚</h5>
-                    <p>學名：Amphiprioninae</p>
-                    <p>
-                      簡介：小丑魚是一種色彩鮮豔的海水魚，常見於印度洋和西太平洋的熱帶珊瑚礁。他們以與海葵的共生關係聞名，利用特殊的黏液避免被海葵的毒素刺傷，藉此獲得掠食者的保護。小丑魚體型小巧，通常呈橙白相間的條紋，性格活潑。
-                    </p>
+                    <h5>名稱：{{ deepItem.name }}</h5>
+                    <p>學名：{{ deepItem.sciName }}</p>
+                    <p>分類:{{ deepItem.class }}</p>
+                    <p>介紹：{{ deepItem.content }}</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+
+        <!--淺海區-->
         <div class="tab-pane fade" id="shallow" role="tabpanel" aria-labelledby="shallow-tab">
           <div class="content">
             <div class="row">
-
-              <div class="col-md-6 mb-4 w-100">
+              <div v-for="shallowItem in forShallow" :key="shallowItem.id" class="col-md-6 mb-4 w-100">
                 <div class="d-flex border p-3 rounded">
-                  <img src="https://picsum.photos/200/200" alt="小丑魚" class="rounded me-3 w-50 h-50" >
+                  <img :src="shallowItem.photo" alt="淺海區" class="rounded me-3 w-50 h-50">
                   <div>
-                    <h5>名稱：小丑魚</h5>
-                    <p>學名：Amphiprioninae</p>
-                    <p>
-                      簡介：小丑魚是一種色彩鮮豔的海水魚，常見於印度洋和西太平洋的熱帶珊瑚礁。他們以與海葵的共生關係聞名，利用特殊的黏液避免被海葵的毒素刺傷，藉此獲得掠食者的保護。小丑魚體型小巧，通常呈橙白相間的條紋，性格活潑。
-                    </p>
+                    <h5>名稱：{{ shallowItem.name }}</h5>
+                    <p>學名：{{ shallowItem.sciName }}</p>
+                    <p>分類:{{ shallowItem.class }}</p>
+                    <p>介紹：{{ shallowItem.content }}</p>
                   </div>
                 </div>
               </div>
-
-              <div class="col-md-6 mb-4 w-100">
-                <div class="d-flex border p-3 rounded">
-                  <img src="https://picsum.photos/200/200" alt="小丑魚" class="rounded me-3 w-50 h-50" >
-                  <div>
-                    <h5>名稱：小丑魚</h5>
-                    <p>學名：Amphiprioninae</p>
-                    <p>
-                      簡介：小丑魚是一種色彩鮮豔的海水魚，常見於印度洋和西太平洋的熱帶珊瑚礁。他們以與海葵的共生關係聞名，利用特殊的黏液避免被海葵的毒素刺傷，藉此獲得掠食者的保護。小丑魚體型小巧，通常呈橙白相間的條紋，性格活潑。
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-6 mb-4 w-100">
-                <div class="d-flex border p-3 rounded">
-                  <img src="https://picsum.photos/200/200" alt="小丑魚" class="rounded me-3 w-50 h-50" >
-                  <div>
-                    <h5>名稱：小丑魚</h5>
-                    <p>學名：Amphiprioninae</p>
-                    <p>
-                      簡介：小丑魚是一種色彩鮮豔的海水魚，常見於印度洋和西太平洋的熱帶珊瑚礁。他們以與海葵的共生關係聞名，利用特殊的黏液避免被海葵的毒素刺傷，藉此獲得掠食者的保護。小丑魚體型小巧，通常呈橙白相間的條紋，性格活潑。
-                    </p>
-                  </div>
-                </div>
-              </div>
-
             </div>
           </div>
         </div>
 
+
+        <!--極地世界-->
         <div class="tab-pane fade" id="ice" role="tabpanel" aria-labelledby="ice-tab">
           <div class="content">
             <div class="row">
-
-              <div class="col-md-6 mb-4 w-100">
+              <div v-for="iceItem in forIce" :key="iceItem.id" class="col-md-6 mb-4 w-100">
                 <div class="d-flex border p-3 rounded">
-                  <img src="https://picsum.photos/200/200" alt="小丑魚" class="rounded me-3 w-50 h-50" >
+                  <img :src="iceItem.photo" alt="極地世界" class="rounded me-3 w-50 h-50">
                   <div>
-                    <h5>名稱：小丑魚</h5>
-                    <p>學名：Amphiprioninae</p>
-                    <p>
-                      簡介：小丑魚是一種色彩鮮豔的海水魚，常見於印度洋和西太平洋的熱帶珊瑚礁。他們以與海葵的共生關係聞名，利用特殊的黏液避免被海葵的毒素刺傷，藉此獲得掠食者的保護。小丑魚體型小巧，通常呈橙白相間的條紋，性格活潑。
-                    </p>
+                    <h5>名稱：{{ iceItem.name }}</h5>
+                    <p>學名：{{ iceItem.sciName }}</p>
+                    <p>分類:{{ iceItem.class }}</p>
+                    <p>介紹：{{ iceItem.content }}</p>
                   </div>
                 </div>
               </div>
-
-              <div class="col-md-6 mb-4 w-100">
-                <div class="d-flex border p-3 rounded">
-                  <img src="https://picsum.photos/200/200" alt="小丑魚" class="rounded me-3 w-50 h-50" >
-                  <div>
-                    <h5>名稱：小丑魚</h5>
-                    <p>學名：Amphiprioninae</p>
-                    <p>
-                      簡介：小丑魚是一種色彩鮮豔的海水魚，常見於印度洋和西太平洋的熱帶珊瑚礁。他們以與海葵的共生關係聞名，利用特殊的黏液避免被海葵的毒素刺傷，藉此獲得掠食者的保護。小丑魚體型小巧，通常呈橙白相間的條紋，性格活潑。
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-6 mb-4 w-100">
-                <div class="d-flex border p-3 rounded">
-                  <img src="https://picsum.photos/200/200" alt="小丑魚" class="rounded me-3 w-50 h-50" >
-                  <div>
-                    <h5>名稱：小丑魚</h5>
-                    <p>學名：Amphiprioninae</p>
-                    <p>
-                      簡介：小丑魚是一種色彩鮮豔的海水魚，常見於印度洋和西太平洋的熱帶珊瑚礁。他們以與海葵的共生關係聞名，利用特殊的黏液避免被海葵的毒素刺傷，藉此獲得掠食者的保護。小丑魚體型小巧，通常呈橙白相間的條紋，性格活潑。
-                    </p>
-                  </div>
-                </div>
-              </div>
-
             </div>
           </div>
         </div>
 
+
+        <!--鯨魚世界-->
         <div class="tab-pane fade" id="whale" role="tabpanel" aria-labelledby="whale-tab">
           <div class="content">
             <div class="row">
 
-              <div class="col-md-6 mb-4 w-100">
+              <div v-for="whaleItem in forWhale" :key="whaleItem.id" class="col-md-6 mb-4 w-100">
                 <div class="d-flex border p-3 rounded">
-                  <img src="https://picsum.photos/200/200" alt="小丑魚" class="rounded me-3 w-50 h-50" >
+                  <img :src="whaleItem.photo" alt="鯨魚世界" class="rounded me-3 w-50 h-50">
                   <div>
-                    <h5>名稱：小丑魚</h5>
-                    <p>學名：Amphiprioninae</p>
-                    <p>
-                      簡介：小丑魚是一種色彩鮮豔的海水魚，常見於印度洋和西太平洋的熱帶珊瑚礁。他們以與海葵的共生關係聞名，利用特殊的黏液避免被海葵的毒素刺傷，藉此獲得掠食者的保護。小丑魚體型小巧，通常呈橙白相間的條紋，性格活潑。
-                    </p>
+                    <h5>名稱：{{ whaleItem.name }}</h5>
+                    <p>學名：{{ whaleItem.sciName }}</p>
+                    <p>分類:{{ whaleItem.class }}</p>
+                    <p>介紹：{{ whaleItem.content }}</p>
                   </div>
                 </div>
               </div>
-
-              <div class="col-md-6 mb-4 w-100">
-                <div class="d-flex border p-3 rounded">
-                  <img src="https://picsum.photos/200/200" alt="小丑魚" class="rounded me-3 w-50 h-50" >
-                  <div>
-                    <h5>名稱：小丑魚</h5>
-                    <p>學名：Amphiprioninae</p>
-                    <p>
-                      簡介：小丑魚是一種色彩鮮豔的海水魚，常見於印度洋和西太平洋的熱帶珊瑚礁。他們以與海葵的共生關係聞名，利用特殊的黏液避免被海葵的毒素刺傷，藉此獲得掠食者的保護。小丑魚體型小巧，通常呈橙白相間的條紋，性格活潑。
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-6 mb-4 w-100">
-                <div class="d-flex border p-3 rounded">
-                  <img src="https://picsum.photos/200/200" alt="小丑魚" class="rounded me-3 w-50 h-50" >
-                  <div>
-                    <h5>名稱：小丑魚</h5>
-                    <p>學名：Amphiprioninae</p>
-                    <p>
-                      簡介：小丑魚是一種色彩鮮豔的海水魚，常見於印度洋和西太平洋的熱帶珊瑚礁。他們以與海葵的共生關係聞名，利用特殊的黏液避免被海葵的毒素刺傷，藉此獲得掠食者的保護。小丑魚體型小巧，通常呈橙白相間的條紋，性格活潑。
-                    </p>
-                  </div>
-                </div>
-              </div>
-
             </div>
           </div>
         </div>
 
-      </div>
+
+    </div>
   </div>
 </div>
 

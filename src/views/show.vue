@@ -4,6 +4,10 @@ import pagefooter from '@/components/footer.vue'
 import carouselComponent from '@/components/carousel.vue'
 import menuComponent from '@/components/menu.vue'
 window.scrollTo(0,0);
+
+import {ref} from "vue";
+import { showContent } from '../data/showContent.js'
+const forShow = ref(showContent)
 </script>
 
 <template>
@@ -15,40 +19,31 @@ window.scrollTo(0,0);
     <menuComponent/>
 
     <div class="show_container d-grid w-100">
-      <div class="show_title p-4">
+      <div class="show_title p-4 text-center">
         <h2>【每日表演活動】</h2>
       </div>
 
-      <div class="show_content justify-center p-4">
+      <div  v-for="item in forShow" :key="item.id" class="show_content justify-center p-4">
         <div class="photo">
-          <img src="https://picsum.photos/600/400" class="w-80">
+          <img :src="item.photo" alt="...">
           <div class="info w-10">
-            <h2>海獅餵食秀</h2>
-            <p>　　每場海獅餵食秀都是一場視覺和聽覺的盛宴，搭配著背景音樂和訓練師的幽默解說，讓觀眾能在輕鬆愉快的氛圍中學習到關於海獅的知識。</p>
+            <h2>{{item.title}}</h2>
+            <p>{{item.intro}}</p>
             <br>
-            <p>場次：2場／日</p>
-            <p>時間：10:30、14:30</p>
-            <p>地點：極地世界區</p>
+            <p>場次：{{item.Session}}場／日</p>
+            <div class="time d-flex">
+            <p>時間：</p>
+            <div  v-for="time in item.Time" :key="time.id" class="d-flex">
+              <div class="timeContent">
+              <p>{{time.time}}</p>
+              </div>
+              <br>
+            </div>
+            </div>
+            <p>地點：{{item.Location}}</p>
           </div>
         </div>
       </div>
-
-      <div class="show_content justify-center p-4">
-        <div class="photo">
-          <img src="https://picsum.photos/600/400" class="w-80">
-          <div class="info w-10">
-            <h2>海獅餵食秀</h2>
-            <p>　　每場海獅餵食秀都是一場視覺和聽覺的盛宴，搭配著背景音樂和訓練師的幽默解說，讓觀眾能在輕鬆愉快的氛圍中學習到關於海獅的知識。</p>
-            <br>
-            <p>場次：2場／日</p>
-            <p>時間：10:30、14:30</p>
-            <p>地點：極地世界區</p>
-          </div>
-        </div>
-      </div>
-
-
-
     </div>
   </div>
 
@@ -80,6 +75,10 @@ window.scrollTo(0,0);
 
 img {
   border-radius: 10px;
+}
+
+.timeContent{
+  margin-right: 10px;
 }
 
 </style>

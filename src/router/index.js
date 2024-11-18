@@ -36,12 +36,12 @@ const routes = [
         component: News
     },
     {
-        path: '/homepage/News/article',
+        path: '/homepage/News/article/:id',
         name: '內文',
         component: Article
     },
     {
-        path: '/homepage/venueTourContent',
+        path: '/homepage/venueTour',
         name: '場館導覽',
         component: VenueTour
     },
