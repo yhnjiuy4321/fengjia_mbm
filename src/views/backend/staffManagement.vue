@@ -4,12 +4,26 @@ import b_header from '@/components/b_header.vue';
 import b_menu from '@/components/b_menuBar.vue';
 import axios from 'axios';
 
+const post = 5001;
+
 const staffs = ref([]);
 
 async function fetchStaffs() {
   try {
-    const response = await axios.get('http://localhost:5000/api/data/member');
+    const response = await axios.get(`http://localhost:${post}/api/data/member`);
     staffs.value = response.data;
+  } catch (error) {
+    console.error('Error fetching staff data:', error);
+  }
+}
+
+async function deleteItem() {
+  try {
+    //警告視窗
+    if (!confirm('確定要刪除嗎?')) {
+      const response = await axios.delete(`http://localhost:${post}/api/data/member`);
+      staffs.value = response.data;
+    }
   } catch (error) {
     console.error('Error fetching staff data:', error);
   }
@@ -37,7 +51,7 @@ onMounted(() => {
 
       <form class="searchArea d-flex">
         <input class="form-control mr-sm-2" type="search" placeholder="輸入姓名或員編搜尋" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0"  type="submit"><i class="fas fa-search p-2"></i></button>
+        <button class="btn btn-success my-2 my-sm-0 m-2"  type="submit"><i class="fas fa-search p-2"></i></button>
       </form>
 
 
@@ -71,6 +85,12 @@ onMounted(() => {
           <td>{{ staff.email }}</td>
           <td>{{ staff.phone }}</td>
           <td>{{ new Date(staff.hireDate).toLocaleDateString() }}</td>
+          <td>
+            <div class="d-flex">
+              <button class="btn btn-primary w-100 m-1" data-bs-toggle="tooltip" title="編輯"><i class="fas fa-edit"></i></button>
+              <button class="btn btn-danger w-100 m-1" data-bs-toggle="tooltip" title="刪除" @click="deleteItem()"><i class="fas fa-trash-alt"></i></button>
+            </div>
+          </td>
         </tr>
       </table>
     </div>
@@ -122,7 +142,6 @@ button {
   padding: 5px;
   border: none;
   border-radius: 5px;
-  background-color: #1fb92e;
   cursor: pointer;
 }
 

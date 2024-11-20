@@ -1,37 +1,25 @@
 <script setup>
-import { ref } from 'vue';
+import { carousel_img } from "@/data/homepage/carousel_img.js";
+const carousel = carousel_img;
 
-const title1 = ref('保留');
-const title2 = ref('保留');
-const title3 = ref('保留');
 </script>
 
 <template>
-  <div id="titleCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <img src="https://ws.nmmba.gov.tw/001/Upload/217/relpic/6628/2104/34ce7298-d938-4a92-a9e2-9723e8e5b57c.jpg" class="d-block w-100" alt="Slide 1">
-        <div class="carousel-caption d-none d-md-block">
-          <h1 class="text-white"> {{title1}} </h1>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <img src="https://ws.nmmba.gov.tw/001/Upload/217/ckfile/3155848f-2209-42a3-aa0c-82273fd3dd08.jpg" class="d-block w-100" alt="Slide 2">
-        <div class="carousel-caption d-none d-md-block">
-          <h1 class="text-white"> {{title2}} </h1>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <img src="https://ws.nmmba.gov.tw/001/Upload/217/relpic/6628/2079/127704ac-8dbd-4bbc-b152-d8b53d2f9999.jpg" class="d-block w-100" alt="Slide 3">
-        <div class="carousel-caption d-none d-md-block">
-          <h1 class="text-white"> {{title3}}  </h1>
-        </div>
+<div id="titleCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+  <div class="carousel-inner">
+    <div v-for="(Item, index) in carousel" :key="Item.id" :class="['carousel-item', { active: index === 0 }]">
+      <img :src="Item.img" class="d-block w-100" :alt="'Slide ' + (index + 1)">
+      <div class="carousel-caption d-none d-md-block">
+        <h1 class="text-white">{{ Item.text }}</h1>
       </div>
     </div>
+  </div>
+
     <button class="carousel-control-prev" type="button" data-bs-target="#titleCarousel" data-bs-slide="prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Previous</span>
     </button>
+
     <button class="carousel-control-next" type="button" data-bs-target="#titleCarousel" data-bs-slide="next">
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Next</span>

@@ -1,6 +1,50 @@
 <script setup>
+import { ref, onMounted } from 'vue';
 import b_header from '@/components/b_header.vue'
 import b_menu from '@/components/b_menuBar.vue'
+import axios from 'axios'
+
+const post = 5001
+
+const tickets = ref([])
+
+//抓取資料
+async function fetchTickets() {
+  try {
+    const response = await axios.get(`http://localhost:${post}/api/data/ticket`)
+
+    //將日期格式化
+    tickets.value = response.data.map(ticket => ({
+      ...ticket,
+      visit_date: new Date(ticket.visit_date).toLocaleDateString(),
+      purchase_time: new Date(ticket.purchase_time).toLocaleDateString()
+
+    }))
+  } catch (error) {
+    console.error('Error fetching ticket data:', error)
+  }
+}
+
+
+//刪除資料(抓ticketId)
+async function deleteItem(ticketId) {
+  try {
+    if (confirm('確定要刪除嗎?')) {
+      await axios.delete(`http://localhost:${post}/api/data/ticket/${ticketId}`)
+      window.location.reload()
+    }
+  } catch (error) {
+    console.error('Error deleting ticket:', error)
+  }
+}
+
+
+
+onMounted(() => {
+  fetchTickets()
+})
+
+
 </script>
 
 <template>
@@ -41,76 +85,65 @@ import b_menu from '@/components/b_menuBar.vue'
           <th>性別</th>
           <th>操作</th>
         </tr>
-        <tr>
-          <td>1</td>
-          <td>2021-10-10</td>
-          <td>2021-10-09</td>
-          <td>小明</td>
-          <td>男</td>
+        <tr  v-for="ticket in tickets" :key="ticket.ticket_id">
+          <td>{{ticket.ticketId}}</td>
+          <td>{{ticket.visit_date}}</td>
+          <td>{{ticket.purchase_time}}</td>
+          <td>{{ticket.name}}</td>
+          <td>{{ticket.gender}}</td>
           <td>
-            <div class="d-grid">
-            <button>查看</button>
-            <button>刪除</button>
-            </div>
+          <div class="d-flex">
+            <button class="btn btn-primary w-100 m-1" data-bs-toggle="modal" data-bs-target="#profileModal" title="查看"><i class="fas fa-eye"></i></button>
+            <button class="btn btn-primary w-100 m-1" data-bs-toggle="tooltip" title="編輯"><i class="fas fa-edit"></i></button>
+            <button class="btn btn-danger w-100 m-1" data-bs-toggle="tooltip" title="刪除" @click="deleteItem(ticket.ticketId)"><i class="fas fa-trash-alt"></i></button>
+          </div>
           </td>
-        </tr>
 
-        <tr>
-          <td>2</td>
-          <td>2021-10-10</td>
-          <td>2021-10-09</td>
-          <td>小美</td>
-          <td>女</td>
-          <td>
-            <div class="d-grid">
-            <button>查看</button>
-            <button>刪除</button>
-            </div>
-          </td>
-        </tr>
 
-        <tr>
-          <td>3</td>
-          <td>2021-10-10</td>
-          <td>2021-10-09</td>
-          <td>小華</td>
-          <td>男</td>
-          <td>
-            <div class="d-grid">
-            <button>查看</button>
-            <button>刪除</button>
-            </div>
-          </td>
-        </tr>
+          <!-- The Modal -->
+          <div class="modal fade" id="profileModal">
+            <div class="modal-dialog">
+              <div class="modal-content">
 
-        <tr>
-          <td>4</td>
-          <td>2021-10-10</td>
-          <td>2021-10-09</td>
-          <td>小強</td>
-          <td>男</td>
-          <td>
-            <div class="d-grid">
-            <button>查看</button>
-            <button>刪除</button>
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">詳細資料</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                  <div class="d-flex">
+                    <div class="w-75">
+                      <p>姓名: {{ticket.name}}</p>
+                      <p>性別: {{ticket.gender}}</p>
+                      <p>電話: {{ticket.phone}}</p>
+                      <p>信箱: {{ticket.email}}</p>
+                      <p>參觀日期: {{ticket.visit_date}}</p>
+                      <p>購票日期: {{ticket.purchase_time}}</p>
+                      <p>全票: {{ticket.adultTicket}}張</p>
+                      <p>兒童票: {{ticket.childTicket}}張</p>
+                      <p>敬老票: {{ticket.elderlyTicket}}張</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+
+              </div>
             </div>
-          </td>
-        </tr>
-        <tr>
-          <td>4</td>
-          <td>2021-10-10</td>
-          <td>2021-10-09</td>
-          <td>小強</td>
-          <td>男</td>
-          <td>
-            <div class="d-grid">
-              <button>查看</button>
-              <button>刪除</button>
-            </div>
-          </td>
+          </div>
+
+
+
         </tr>
       </table>
     </div>
+
+
   </div>
 </template>
 
@@ -161,20 +194,12 @@ import b_menu from '@/components/b_menuBar.vue'
     margin: 5px;
     border: none;
     border-radius: 5px;
-    background-color: #1fb92e;
     cursor: pointer;
   }
 
   button:hover {
-    background-color: rgb(19, 117, 68);
+    background-color: rgba(119, 178, 239, 0.5);
     color: white;
-
   }
-
-  .d-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-
 
 </style>

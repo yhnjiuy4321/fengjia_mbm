@@ -11,6 +11,10 @@ const goToTicket = () => {
 const goToStaff = () => {
   router.push('/backend/login/staffManagement')
 }
+
+const logout = () => {
+  router.push('/backend/login')
+}
 </script>
 
 <template>

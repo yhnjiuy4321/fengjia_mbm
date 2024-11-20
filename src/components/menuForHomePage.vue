@@ -19,6 +19,10 @@ const goToNews = () => {
 const goToVenueTour = () => {
   router.push('/homepage/VenueTour')
 }
+
+import { menu } from "@/data/homepage/menu.js";
+import {intro} from "@/data/homepage/sampleIntro.js";
+const menuList = menu
 </script>
 
 <template>
@@ -26,24 +30,25 @@ const goToVenueTour = () => {
     <div>
       <h1 class="text-center text-white mt-3">功能列表</h1>
     </div>
-    <div class="row d-flex flex-row">
+    <div  v-for=" menuItem in menuList"class="row d-flex justify-content-center">
 
     <!--場館導覽-->
       <div class="col-12 col-md-6 col-lg-2 d-flex mt-4">
         <div class="card">
-          <h5 class="card-title text-center">場館導覽</h5>
+          <h5 class="card-title text-center">{{ menuItem.name1 }}</h5>
           <div class="cover" @click="goToVenueTour">
-            <img src="https://picsum.photos/400/600" class="card-img-top rounded-0" alt="...">
+            <img :src="menuItem.photo1" alt="...">
           </div>
         </div>
       </div>
 
+
       <!--服務與售票-->
       <div class="col-12 col-md-6 col-lg-2 d-flex mt-4">
         <div class="card">
-          <h5 class="card-title text-center">服務與售票</h5>
+          <h5 class="card-title text-center">{{ menuItem.name2 }}</h5>
           <div class="cover">
-            <img src="https://picsum.photos/400/600" class="card-img-top rounded-0" alt="...">
+            <img :src="menuItem.photo2" alt="...">
           </div>
         </div>
       </div>
@@ -52,51 +57,51 @@ const goToVenueTour = () => {
       <!--表演活動-->
       <div class="col-12 col-md-6 col-lg-2 d-flex mt-4">
         <div class="card">
-          <h5 class="card-title text-center">表演活動</h5>
+          <h5 class="card-title text-center">{{ menuItem.name3 }}</h5>
           <div class="cover" @click="goToShow()">
-            <img src="https://picsum.photos/400/600" class="card-img-top rounded-0" alt="...">
+            <img :src="menuItem.photo3" alt="...">
           </div>
         </div>
       </div>
+
 
       <!--Q&A問答-->
       <div class="col-12 col-md-6 col-lg-2 d-flex mt-4">
         <div class="card">
-          <h5 class="card-title text-center">Q&A問答</h5>
+          <h5 class="card-title text-center">{{ menuItem.name4 }}</h5>
           <div class="cover" @click="goToQA()">
-            <img src="https://picsum.photos/400/600" class="card-img-top rounded-0" alt="...">
+            <img :src="menuItem.photo4" alt="...">
           </div>
         </div>
       </div>
+
 
       <!--最新消息-->
       <div class="col-12 col-md-6 col-lg-2 d-flex mt-4">
         <div class="card">
-          <h5 class="card-title text-center">最新消息</h5>
+          <h5 class="card-title text-center">{{ menuItem.name5 }}</h5>
           <div class="cover" @click="goToNews">
-            <img src="https://picsum.photos/400/600" class="card-img-top rounded-0" alt="...">
+            <img :src="menuItem.photo5" alt="...">
           </div>
         </div>
       </div>
 
+
       <!--互動專區-->
       <div class="col-12 col-md-6 col-lg-2 d-flex mt-4">
         <div class="card">
-          <h5 class="card-title text-center">互動專區</h5>
+          <h5 class="card-title text-center">{{ menuItem.name6 }}</h5>
           <div class="cover">
-            <img src="https://picsum.photos/400/600" class="card-img-top rounded-0" alt="...">
+            <img :src="menuItem.photo6" alt="...">
           </div>
         </div>
       </div>
     </div>
 
-
   </div>
 </template>
 
 <style scoped>
-
-
 
 .container {
   background-color: #77b2ef;

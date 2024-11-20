@@ -6,7 +6,16 @@ const staffSchema = new mongoose.Schema({
     gender: String,
     email: String,
     phone: String,
-    hireDate: String
+    hireDate: String,
+    account: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
 }, { collection: 'Member' }); // Specify collection name as 'Member'
 
 export const StaffModel = mongoose.model('StaffModel', staffSchema);

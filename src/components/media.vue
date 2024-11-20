@@ -1,18 +1,18 @@
 <script setup>
-
+import { mediaContent } from "@/data/homepage/media.js";
+const media = mediaContent;
 </script>
 
 <template>
 
   <div class="container w-100 bg-primary p-2">
     <h1 class="text-center ml-3 mr-3">媒體影音</h1>
-    <div class="box d-flex justify-content-around">
+    <div v-for=" item  in media" class="box d-flex justify-content-around">
 
 
       <!--影片-->
       <div class="video ">
-          <iframe src="https://www.youtube.com/embed/7lCDEYXw3mM" title="YouTube video player" frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe :src="item.video" frameborder="0" allowfullscreen></iframe>
       </div>
 
       <!--海報-->
@@ -27,16 +27,11 @@
 
         <!--輪播內容-->
         <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img src="https://uniquephoto.com.tw/wp-content/uploads/2024/02/%E5%AE%98%E7%B6%B2%E7%9B%B4%E5%BC%8F_%E7%9B%B4%E6%B5%B7%E5%A0%B1-09.jpg" class="d-block w-100" alt="...">
-          </div>
-          <div class="carousel-item">
-            <img src="https://uniquephoto.com.tw/wp-content/uploads/2024/02/%E5%AE%98%E7%B6%B2%E7%9B%B4%E5%BC%8F_%E7%9B%B4%E6%B5%B7%E5%A0%B1-09.jpg" class="d-block w-100" alt="...">
-          </div>
-          <div class="carousel-item">
-            <img src="https://uniquephoto.com.tw/wp-content/uploads/2024/02/%E5%AE%98%E7%B6%B2%E7%9B%B4%E5%BC%8F_%E7%9B%B4%E6%B5%B7%E5%A0%B1-09.jpg" class="d-block w-100" alt="...">
+          <div v-for="(Item, index) in item.poster" :key="Item.id" :class="['carousel-item', { active: index === 0 }]">
+            <img :src="Item.img" class="d-block w-100" :alt="'Slide ' + (index + 1)">
           </div>
         </div>
+
       </div>
   </div>
   </div>
@@ -79,7 +74,7 @@ img {
 }
 
 .carousel-item img:hover {
-  opacity: 0.5;
+  opacity: 0.8;
 }
 
 .circle-btn {
