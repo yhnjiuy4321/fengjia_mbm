@@ -10,6 +10,10 @@ import searchTicket from '../views/searchTicket.vue';
 import login from '../views/backend/loginView.vue';
 import ticketManage from '../views/backend/ticketManagement.vue';
 import staffManage from '../views/backend/staffManagement.vue';
+import { authState } from '/Backend/auth.js';
+
+
+
 
 const routes = [
     {
@@ -61,11 +65,14 @@ const routes = [
     },
     {
         path: '/backend/login/ticketManagement',
-        component: ticketManage
+        component: ticketManage,
+        meta: { requiresAuth: true }
+
     },
     {
         path: '/backend/login/staffManagement',
-        component: staffManage
+        component: staffManage,
+        meta: { requiresAuth: true }
     }
 
 ];
@@ -77,4 +84,14 @@ const router = createRouter({
 
 
 
+
 export default router;
+
+
+router.beforeEach((to, from, next) => {
+    if (to.meta.requiresAuth && !authState.isAuthenticated) {
+        next('/backend/login'); // Redirect to login page if not authenticated
+    } else {
+        next(); // Proceed to the requested route if authenticated or if the route does not require authentication
+    }
+});

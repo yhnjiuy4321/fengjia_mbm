@@ -7,6 +7,7 @@ import axios from 'axios'
 const post = 5001
 
 const tickets = ref([])
+const originalTickets = ref([])
 
 //抓取資料
 async function fetchTickets() {
@@ -20,6 +21,13 @@ async function fetchTickets() {
       purchase_time: new Date(ticket.purchase_time).toLocaleDateString()
 
     }))
+
+    originalTickets.value = response.data.map(ticket => ({
+      ...ticket,
+      visit_date: new Date(ticket.visit_date).toLocaleDateString(),
+      purchase_time: new Date(ticket.purchase_time).toLocaleDateString()
+    }))
+
   } catch (error) {
     console.error('Error fetching ticket data:', error)
   }
@@ -31,13 +39,50 @@ async function deleteItem(ticketId) {
   try {
     if (confirm('確定要刪除嗎?')) {
       await axios.delete(`http://localhost:${post}/api/data/ticket/${ticketId}`)
-      window.location.reload()
+      tickets.value = tickets.value.filter(ticket => ticket.ticketId !== ticketId)
+      originalTickets.value = originalTickets.value.filter(ticket => ticket.ticketId !== ticketId)
     }
   } catch (error) {
     console.error('Error deleting ticket:', error)
   }
 }
 
+//篩選
+const handleSelection = (e) => {
+  console.log(e.target.value)
+  //依訂單編號排序
+  switch (e.target.value) {
+    case 'idAsc':
+      tickets.value = [...originalTickets.value].sort((a, b) =>
+        Number(a.ticketId.replace("t","")) - Number(b.ticketId.replace("t",""))
+      )
+      break
+    case 'idDesc':
+      tickets.value = [...originalTickets.value].sort((a, b) =>
+        Number(b.ticketId.replace("t","")) - Number(a.ticketId.replace("t",""))
+      )
+      break
+    case 'male':
+      tickets.value = originalTickets.value.filter (ticket => ticket.gender === '男')
+      break
+    case 'female':
+      tickets.value = originalTickets.value.filter (ticket => ticket.gender === '女')
+      break
+    case 'showall':
+      tickets.value = originalTickets.value
+      break
+    default:
+      console.error('Unknown sorting/filtering option:', e.target.value)
+
+  }
+}
+
+//搜尋
+const searchRes = (e) => {
+  e.preventDefault()
+  const searchInput = e.target[0].value
+  tickets.value = originalTickets.value.filter(ticket => ticket.name.includes(searchInput) || ticket.ticketId.includes(searchInput))
+}
 
 
 onMounted(() => {
@@ -60,17 +105,18 @@ onMounted(() => {
 
     <div class="tool justify-between">
 
-      <form class="searchArea d-flex">
+      <form class="searchArea d-flex" @submit.prevent="searchRes">
         <input class="form-control mr-sm-2" type="search" placeholder="輸入姓名或序號搜尋" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0"  type="submit"><i class="fas fa-search p-2"></i></button>
+        <button class="btn btn-success my-2 my-sm-0"  type="submit"><i class="fas fa-search p-2"></i></button>
       </form>
 
-      <select class="form-select w-25">
+      <select class="form-select w-25" @change="handleSelection">
         <option disabled selected>--篩選--</option>
         <option value="idAsc">依id排序(升冪)</option>
         <option value="idDesc">依id排序(降冪)</option>
-        <option value="scoreHtoL">只選男生</option>
-        <option value="scoreLtoH">只選女生</option>
+        <option value="male">只選男生</option>
+        <option value="female">只選女生</option>
+        <option value="showall">顯示全部</option>
       </select>
 
     </div>
@@ -93,7 +139,7 @@ onMounted(() => {
           <td>{{ticket.gender}}</td>
           <td>
           <div class="d-flex">
-            <button class="btn btn-primary w-100 m-1" data-bs-toggle="modal" data-bs-target="#profileModal" title="查看"><i class="fas fa-eye"></i></button>
+            <button class="btn btn-info w-100 m-1" data-bs-toggle="modal" data-bs-target="#profileModal" title="查看"><i class="fas fa-eye"></i></button>
             <button class="btn btn-primary w-100 m-1" data-bs-toggle="tooltip" title="編輯"><i class="fas fa-edit"></i></button>
             <button class="btn btn-danger w-100 m-1" data-bs-toggle="tooltip" title="刪除" @click="deleteItem(ticket.ticketId)"><i class="fas fa-trash-alt"></i></button>
           </div>

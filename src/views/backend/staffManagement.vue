@@ -6,32 +6,74 @@ import axios from 'axios';
 
 const post = 5001;
 
-const staffs = ref([]);
+const staffs = ref([]); //顯示資料
+const originalStaffs = ref([]); //原始資料
 
+//抓取資料
 async function fetchStaffs() {
   try {
     const response = await axios.get(`http://localhost:${post}/api/data/member`);
     staffs.value = response.data;
+    originalStaffs.value = response.data;
   } catch (error) {
     console.error('Error fetching staff data:', error);
   }
 }
 
-async function deleteItem() {
+//刪除資料(抓employeeId)
+const deleteItem = async (employeeId) => {
   try {
-    //警告視窗
-    if (!confirm('確定要刪除嗎?')) {
-      const response = await axios.delete(`http://localhost:${post}/api/data/member`);
-      staffs.value = response.data;
+    if (confirm('確定要刪除嗎?')) {
+      await axios.delete(`http://localhost:${post}/api/data/member/${employeeId}`);
+      staffs.value = staffs.value.filter(staff => staff.employeeId !== employeeId);
+      originalStaffs.value = originalStaffs.value.filter(staff => staff.employeeId !== employeeId);
     }
   } catch (error) {
-    console.error('Error fetching staff data:', error);
+    console.error('Error deleting staff:', error);
   }
-}
+};
+
+//篩選
+const handleSelection = (e) => {
+  console.log(e.target.value);
+  //依員工編號排序
+  switch (e.target.value) {
+    case 'idAsc':
+      staffs.value = [...originalStaffs.value].sort((a, b) =>
+          Number(a.employeeId.replace("EMP", "")) - Number(b.employeeId.replace("EMP", ""))
+      );
+      break;
+    case 'idDesc':
+      staffs.value = [...originalStaffs.value].sort((a, b) =>
+          Number(b.employeeId.replace("EMP", "")) - Number(a.employeeId.replace("EMP", ""))
+      );
+      break;
+    case 'male':
+      staffs.value = originalStaffs.value.filter(staff => staff.gender === '男');
+      break;
+    case 'female':
+      staffs.value = originalStaffs.value.filter(staff => staff.gender === '女');
+      break;
+    case 'showall':
+      staffs.value = originalStaffs.value;
+      break;
+    default:
+      console.error('Unknown sorting/filtering option:', e.target.value);
+  }
+
+};
+
+//搜尋
+const searchRes = (e) => {
+  e.preventDefault();
+  const searchValue = e.target[0].value;
+  staffs.value = originalStaffs.value.filter(staff => staff.name.includes(searchValue) || staff.employeeId.includes(searchValue));
+};
 
 onMounted(() => {
   fetchStaffs();
 });
+
 
 
 </script>
@@ -49,7 +91,7 @@ onMounted(() => {
 
     <div class="tool justify-between">
 
-      <form class="searchArea d-flex">
+      <form class="searchArea d-flex" @submit.prevent="searchRes">
         <input class="form-control mr-sm-2" type="search" placeholder="輸入姓名或員編搜尋" aria-label="Search">
         <button class="btn btn-success my-2 my-sm-0 m-2"  type="submit"><i class="fas fa-search p-2"></i></button>
       </form>
@@ -57,18 +99,19 @@ onMounted(() => {
 
       <button class="btn btn-primary d-flex" data-bs-toggle="tooltip" title="新增人員"><i class="fas fa-plus"></i><br><i class="fas fa-user"></i></button>
 
-      <select class="form-select w-25">
-        <option disabled selected>--篩選--</option>
-        <option value="idAsc">依id排序(升冪)</option>
-        <option value="idDesc">依id排序(降冪)</option>
-        <option value="scoreHtoL">只選男生</option>
-        <option value="scoreLtoH">只選女生</option>
+      <select class="form-select w-25"  @change="handleSelection" >
+        <option  disabled selected  >--篩選--</option>
+        <option value="idAsc">依員編排序(升冪)</option>
+        <option value="idDesc">依員編排序(降冪)</option>
+        <option value="male">只選男生</option>
+        <option value="female">只選女生</option>
+        <option value="showall">顯示全部</option>
       </select>
 
     </div>
 
     <div class="staffTable">
-      <table>
+      <table id="data">
         <tr>
           <th>員工編號</th>
           <th>姓名</th>
@@ -88,7 +131,7 @@ onMounted(() => {
           <td>
             <div class="d-flex">
               <button class="btn btn-primary w-100 m-1" data-bs-toggle="tooltip" title="編輯"><i class="fas fa-edit"></i></button>
-              <button class="btn btn-danger w-100 m-1" data-bs-toggle="tooltip" title="刪除" @click="deleteItem()"><i class="fas fa-trash-alt"></i></button>
+              <button class="btn btn-danger w-100 m-1" data-bs-toggle="tooltip" title="刪除" @click="deleteItem(staff.employeeId)"><i class="fas fa-trash-alt"></i></button>
             </div>
           </td>
         </tr>

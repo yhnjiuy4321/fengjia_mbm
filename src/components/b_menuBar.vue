@@ -1,6 +1,7 @@
 <script setup>
 
 import { useRouter } from 'vue-router'
+import { logout } from "../../Backend/auth.js";
 
 const router = useRouter()
 
@@ -12,8 +13,13 @@ const goToStaff = () => {
   router.push('/backend/login/staffManagement')
 }
 
-const logout = () => {
-  router.push('/backend/login')
+const leave = () => {
+  //詢問是否登出，登出後導向登入頁
+  if (confirm('確定要登出嗎?')) {
+    logout()
+    router.push('/backend/login')
+    alert('登出成功')
+  }
 }
 </script>
 
@@ -33,7 +39,7 @@ const logout = () => {
 
       <!-- Logout -->
       <div class="d-flex justify-content-end">
-        <button class="btn_logout" @click="logout" data-bs-toggle="tooltip" title="登出"><i class="fas fa-sign-out-alt"></i></button>
+        <button class="btn_logout" @click="leave" data-bs-toggle="tooltip" title="登出"><i class="fas fa-sign-out-alt"></i></button>
       </div>
     </div>
 

@@ -83,6 +83,17 @@ app.delete('/api/data/ticket/:ticketId', async (req, res) => {
     }
 });
 
+// API查詢票務資料(用電話或身分證)
+app.get('/api/data/ticket/:phoneOrIdentity', async (req, res) => {
+    const phoneOrIdentity = req.params.phoneOrIdentity;
+    try {
+        const data = await TicketModel.find({ $or: [{ phone: phoneOrIdentity }, { identity: phoneOrIdentity }] });
+        res.json(data);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 
 // API登入
 app.post('/api/login', async (req, res) => {

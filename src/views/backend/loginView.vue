@@ -1,31 +1,25 @@
 <script setup>
 import b_header from '@/components/b_header.vue'
-import axios from 'axios'
+import { login } from "/Backend/auth.js";
 import { ref } from 'vue'
 import router from "@/router/index.js";
 
-
-
 const account = ref('')
 const password = ref('')
-const login = async () => {
+
+const enter = async () => {
   try {
-    const response = await axios.post('http://localhost:5001/api/login', {
-      account: account.value,
-      password: password.value
-    });
-    if (response.data.success) {
-      alert('Login successful');
-      // 跳轉到票務頁面
-      await router.push('/backend/login/ticketManagement');
-    } else {
-      alert('輸入錯誤，請重新確認帳號密碼');
-    }
+    await login(account.value, password.value)
+    alert('登入成功')
+    await router.push('/backend/login/staffManagement')
   } catch (error) {
-    console.error(error);
-    alert('輸入錯誤，請重新確認帳號密碼');
+    console.error('Login failed:', error)
+    alert('登入失敗. 請確認您的帳號密碼是否正確')
   }
 }
+
+
+
 </script>
 
 <template>
@@ -44,7 +38,7 @@ const login = async () => {
         <input type="text" id="password" v-model="password" name="password" placeholder="請輸入密碼">
       </div>
 
-      <button class="btn btn-primary mt-3" @click="login">登入</button>
+      <button class="btn btn-primary mt-3" @click="enter">登入</button>
 
     </div>
 

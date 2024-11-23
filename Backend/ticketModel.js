@@ -7,7 +7,6 @@ const ticketSchema = new mongoose.Schema({
     email: String,
     identity: String,
     phone: String,
-    lastFourDigits: String,
     adultTicket: Number,
     childTicket: Number,
     elderlyTicket: Number,
