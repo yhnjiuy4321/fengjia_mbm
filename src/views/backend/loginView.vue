@@ -11,7 +11,9 @@ const enter = async () => {
   try {
     await login(account.value, password.value)
     alert('登入成功')
-    await router.push('/backend/login/staffManagement')
+    await router.push('/backend/login/ticketManagement')
+    //console.log該帳號的資料
+
   } catch (error) {
     console.error('Login failed:', error)
     alert('登入失敗. 請確認您的帳號密碼是否正確')

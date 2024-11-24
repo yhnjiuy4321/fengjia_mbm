@@ -4,10 +4,27 @@ import b_header from '@/components/b_header.vue';
 import b_menu from '@/components/b_menuBar.vue';
 import axios from 'axios';
 
-const post = 5001;
+const post = 5001;//port
 
-const staffs = ref([]); //顯示資料
-const originalStaffs = ref([]); //原始資料
+
+//員工資料
+const staffs = ref([]);
+
+//原始資料
+const originalStaffs = ref({
+});
+
+//選中的員工資料
+const selectedStaff = ref({
+  employeeId: '',
+  name:'',
+  gender: '',
+  email: '' ,
+  phone: '',
+  hireDate: '',
+  account: '',
+  password: ''
+});
 
 //抓取資料
 async function fetchStaffs() {
@@ -32,6 +49,23 @@ const deleteItem = async (employeeId) => {
     console.error('Error deleting staff:', error);
   }
 };
+
+//更新資料
+const updateStaff = async (e) => {
+  e.preventDefault();//防止表單提交
+  try {
+    await axios.put(`http://localhost:${post}/api/data/member/${selectedStaff.value.employeeId}`, selectedStaff.value);
+    await fetchStaffs();
+    alert('更新成功，請返回頁面確認');
+  } catch (error) {
+    console.error('Error updating staff:', error);
+  }
+};
+
+const editStaff = (staff) => {
+  selectedStaff.value = { ...staff };
+};
+
 
 //篩選
 const handleSelection = (e) => {
@@ -63,12 +97,14 @@ const handleSelection = (e) => {
 
 };
 
+
 //搜尋
 const searchRes = (e) => {
   e.preventDefault();
   const searchValue = e.target[0].value;
   staffs.value = originalStaffs.value.filter(staff => staff.name.includes(searchValue) || staff.employeeId.includes(searchValue));
 };
+
 
 onMounted(() => {
   fetchStaffs();
@@ -130,14 +166,69 @@ onMounted(() => {
           <td>{{ new Date(staff.hireDate).toLocaleDateString() }}</td>
           <td>
             <div class="d-flex">
-              <button class="btn btn-primary w-100 m-1" data-bs-toggle="tooltip" title="編輯"><i class="fas fa-edit"></i></button>
+              <button class="btn btn-primary w-100 m-1" data-bs-toggle="modal" title="編輯" data-bs-target="#profileModal" @click="editStaff(staff)"><i class="fas fa-edit"></i></button>
               <button class="btn btn-danger w-100 m-1" data-bs-toggle="tooltip" title="刪除" @click="deleteItem(staff.employeeId)"><i class="fas fa-trash-alt"></i></button>
             </div>
           </td>
         </tr>
       </table>
     </div>
+
+    <div class="modal fade" id="profileModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">員工資料</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <form @submit="updateStaff">
+              <div class="mb-3">
+                <label for="employeeId" class="form-label text-dark ">員工編號</label>
+                <input type="text" class="form-control" id="employeeId" v-model="selectedStaff.employeeId" disabled>
+              </div>
+              <div class="mb-3">
+                <label for="name" class="form-label text-dark">姓名</label>
+                <input type="text" class="form-control" id="name" v-model="selectedStaff.name">
+              </div>
+              <div class="mb-3">
+                <label for="gender" class="form-label text-dark">性別</label>
+                <input type="text" class="form-control" id="name" v-model="selectedStaff.gender">
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label text-dark">信箱</label>
+                <div class="d-flex">
+                <input type="text" class="form-control " id="email" v-model="selectedStaff.email">
+                  <span class="companyEmail">@fengjia.mbm.com</span>
+                  </div>
+              </div>
+              <div class="mb-3">
+                <label for="phone" class="form-label text-dark">手機</label>
+                <input type="text" class="form-control" id="phone" v-model="selectedStaff.phone">
+              </div>
+              <div class="mb-3">
+                <label for="hireDate" class="form-label text-dark">到職日期</label>
+                <input type="date" class="form-control" id="hireDate" v-model="selectedStaff.hireDate">
+              </div>
+              <div class="mb-3">
+                <label for="hireDate" class="form-label text-dark">帳號</label>
+                <input type="text" class="form-control" id="hireDate" v-model="selectedStaff.account" disabled>
+              </div>
+              <div class="mb-3">
+                <label for="hireDate" class="form-label text-dark">密碼</label>
+                <input type="text" class="form-control" id="hireDate" v-model="selectedStaff.password" disabled>
+              </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger w-25" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary w-25">Save</button>
+          </div>
+            </form>
+        </div>
+      </div>
+    </div>
   </div>
+</div>
 
 </template>
 
@@ -204,5 +295,16 @@ button.btn-primary {
 }
 button .fas{
   margin: 0 3px;
+}
+
+.modal-body {
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+.companyEmail{
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
 }
 </style>

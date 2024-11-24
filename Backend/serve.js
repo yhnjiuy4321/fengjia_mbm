@@ -28,6 +28,17 @@ app.get('/api/data/member', async (req, res) => {
     }
 });
 
+// API獲取員工資料(用employeeId)
+app.get('/api/data/member/:employeeId', async (req, res) => {
+    const employeeId = req.params.employeeId;
+    try {
+        const data = await StaffModel.findOne({ employeeId: employeeId });
+        res.json(data);
+    } catch (err) {
+        res.status(500).json({error: err.message});
+    }
+});
+
 // API刪除員工資料(用employeeId)
 app.delete('/api/data/member/:employeeId', async (req, res) => {
     const employeeId = req.params.employeeId;
@@ -44,6 +55,19 @@ app.post('/api/data/member', async (req, res) => {
     const newStaff = req.body;
     try {
         const data = await StaffModel.create(newStaff);
+        res.json(data);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// API更新員工資料(用employeeId)
+app.put('/api/data/member/:employeeId', async (req, res) => {
+    const employeeId = req.params.employeeId;
+    const updatedStaff = req.body;
+    updatedStaff.email =updatedStaff.email+'@fengjia.mbm.com';
+    try {
+        const data = await StaffModel.updateOne({ employeeId: employeeId }, updatedStaff);
         res.json(data);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -103,6 +127,7 @@ app.post('/api/login', async (req, res) => {
         const user = await StaffModel.findOne({ account, password });
         if (user) {
             res.json({ success: true, message: 'Login successful', user });
+
         } else {
             res.status(401).json({ success: false, message: 'Invalid credentials' });
         }

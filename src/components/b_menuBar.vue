@@ -1,9 +1,8 @@
 <script setup>
-
 import { useRouter } from 'vue-router'
-import { logout } from "../../Backend/auth.js";
-
+import { logout , getStaffName } from "../../Backend/auth.js";
 const router = useRouter()
+
 
 const goToTicket = () => {
   router.push('/backend/login/ticketManagement')
@@ -21,6 +20,7 @@ const leave = () => {
     alert('登出成功')
   }
 }
+
 </script>
 
 <template>
@@ -39,6 +39,10 @@ const leave = () => {
 
       <!-- Logout -->
       <div class="d-flex justify-content-end">
+        <div class="whoLogin justify-content-center">
+          <i class="fas fa-user-circle m-2"></i>
+          <span>{{getStaffName.name}}</span><!--登入人員的名子-->
+        </div>
         <button class="btn_logout" @click="leave" data-bs-toggle="tooltip" title="登出"><i class="fas fa-sign-out-alt"></i></button>
       </div>
     </div>
@@ -57,6 +61,8 @@ nav {
 
 .nav-link {
   color: #ffffff;
+  border-radius: 5px;
+  margin-right:10px;
 }
 
 
@@ -73,5 +79,16 @@ nav {
   margin: 3px;
   font-size: 20px;
   cursor: pointer;
+}
+
+.btn_logout:hover {
+  color: #ffd500;
+}
+
+.whoLogin {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+  color: white;
 }
 </style>

@@ -71,11 +71,31 @@ const handleSelection = (e) => {
     case 'showall':
       tickets.value = originalTickets.value
       break
+    case 'visitAsc':
+      tickets.value = [...originalTickets.value].sort((a, b) =>
+        new Date(a.visit_date) - new Date(b.visit_date)
+      )
+      break
+    case 'visitDesc':
+      tickets.value = [...originalTickets.value].sort((a, b) =>
+        new Date(b.visit_date) - new Date(a.visit_date)
+      )
+      break
+    case 'purchaseAsc':
+      tickets.value = [...originalTickets.value].sort((a, b) =>
+        new Date(a.purchase_time) - new Date(b.purchase_time)
+      )
+      break
+    case 'purchaseDesc':
+      tickets.value = [...originalTickets.value].sort((a, b) =>
+        new Date(b.purchase_time) - new Date(a.purchase_time)
+      )
+      break
     default:
       console.error('Unknown sorting/filtering option:', e.target.value)
-
   }
 }
+
 
 //搜尋
 const searchRes = (e) => {
@@ -112,8 +132,12 @@ onMounted(() => {
 
       <select class="form-select w-25" @change="handleSelection">
         <option disabled selected>--篩選--</option>
-        <option value="idAsc">依id排序(升冪)</option>
-        <option value="idDesc">依id排序(降冪)</option>
+        <option value="idAsc">依訂單編號排序(由小到大)</option>
+        <option value="idDesc">依訂單編號排序(由大到小)</option>
+        <option value="visitAsc">依參觀日期排序(從最早)</option>
+        <option value="visitDesc">依參觀日期排序(從最晚)</option>
+        <option value="purchaseAsc">依購票日期排序(從最早)</option>
+        <option value="purchaseDesc">依購票日期排序(從最晚)</option>
         <option value="male">只選男生</option>
         <option value="female">只選女生</option>
         <option value="showall">顯示全部</option>
@@ -140,7 +164,7 @@ onMounted(() => {
           <td>
           <div class="d-flex">
             <button class="btn btn-info w-100 m-1" data-bs-toggle="modal" data-bs-target="#profileModal" title="查看"><i class="fas fa-eye"></i></button>
-            <button class="btn btn-primary w-100 m-1" data-bs-toggle="tooltip" title="編輯"><i class="fas fa-edit"></i></button>
+        <!--<button class="btn btn-primary w-100 m-1" data-bs-toggle="tooltip" title="編輯"><i class="fas fa-edit"></i></button>-->
             <button class="btn btn-danger w-100 m-1" data-bs-toggle="tooltip" title="刪除" @click="deleteItem(ticket.ticketId)"><i class="fas fa-trash-alt"></i></button>
           </div>
           </td>
@@ -153,23 +177,24 @@ onMounted(() => {
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                  <h4 class="modal-title">詳細資料</h4>
+                  <h4 class="modal-title">編號 {{ticket.ticketId}} 的詳細資料</h4>
                   <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
                 <!-- Modal body -->
                 <div class="modal-body">
                   <div class="d-flex">
-                    <div class="w-75">
+                    <div class="w-100">
                       <p>姓名: {{ticket.name}}</p>
                       <p>性別: {{ticket.gender}}</p>
+                      <p>身分證: {{ticket.identity}}</p>
                       <p>電話: {{ticket.phone}}</p>
                       <p>信箱: {{ticket.email}}</p>
                       <p>參觀日期: {{ticket.visit_date}}</p>
                       <p>購票日期: {{ticket.purchase_time}}</p>
-                      <p>全票: {{ticket.adultTicket}}張</p>
-                      <p>兒童票: {{ticket.childTicket}}張</p>
-                      <p>敬老票: {{ticket.elderlyTicket}}張</p>
+                      <p>全票: {{ticket.adultTicket}} 張</p>
+                      <p>兒童票: {{ticket.childTicket}} 張</p>
+                      <p>敬老票: {{ticket.elderlyTicket}} 張</p>
                     </div>
                   </div>
                 </div>
@@ -183,8 +208,6 @@ onMounted(() => {
             </div>
           </div>
 
-
-
         </tr>
       </table>
     </div>
@@ -194,9 +217,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-
-
-
   .container {
     display: flex;
     flex-direction: column;
@@ -246,6 +266,12 @@ onMounted(() => {
   button:hover {
     background-color: rgba(119, 178, 239, 0.5);
     color: white;
+  }
+  .modal-body{
+    display: flex;
+    overflow-y: auto;
+    max-height: 300px;
+    margin-bottom: 10px;
   }
 
 </style>
