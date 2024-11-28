@@ -9,9 +9,9 @@
       <span class="engName  text-center">Feng Chia Marine Biology Museum</span>
     </div>
     <select class="form-select">
-      <option>-LANGUEGE-</option>
-      <option value="nameAsc">繁體中文</option>
-      <option value="nameDesc">ENGLISH</option>
+      <option disabled>-LANGUEGE-</option>
+      <option value="tw">繁體中文(預設)</option>
+      <option value="en">ENGLISH</option>
     </select>
   </header>
 </template>
@@ -92,5 +92,6 @@ export default {
     },
   },
 };
+
 
 </script>

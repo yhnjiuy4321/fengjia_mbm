@@ -7,10 +7,6 @@ const router = useRouter()
 const pageName = router.currentRoute.value.name
 
 
-const gotoTour = () => {
-  router.push('/homepage/VenueTour')
-}
-
 const scrollToSection = async (section) => {
   await router.push('/homepage/VenueTour')
   setTimeout(() => {
@@ -24,7 +20,10 @@ const scrollToSection = async (section) => {
 
 const gotoQA = () => {
   router.push('/homepage/Q&A')
+}
 
+const gotoAboutUs = () => {
+  router.push('/homepage/about')
 }
 
 const gotoShow = () => {
@@ -39,13 +38,14 @@ const gotoSR = () => {
   router.push('/homepage/service_rules')
 }
 
-/*const gotoTicket = () => {
-  router.push('/homepage/Ticket')
-}*/
+const gotoTicket = () => {
+  router.push('/homepage/ticketShop')
+}
 
 const gotoSearchTicket = () => {
   router.push('/homepage/searchTicket')
 }
+
 
 
 
@@ -100,7 +100,7 @@ const gotoSearchTicket = () => {
         </li>
 
         <li class="nav-item bg-primary">
-          <a class="nav-link" href="#">關於我們</a>
+          <a class="nav-link" href="#" @click="gotoAboutUs()">關於我們</a>
         </li>
 
         <li class="nav-item bg-primary">

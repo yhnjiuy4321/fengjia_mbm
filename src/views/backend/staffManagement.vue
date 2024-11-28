@@ -3,6 +3,8 @@ import { ref, onMounted } from 'vue';
 import b_header from '@/components/b_header.vue';
 import b_menu from '@/components/b_menuBar.vue';
 import axios from 'axios';
+import router from "@/router/index.js";
+import {authState, getStaffName} from "../../../Backend/auth.js";
 
 const post = 5001;//port
 
@@ -63,7 +65,10 @@ const updateStaff = async (e) => {
 };
 
 const editStaff = (staff) => {
-  selectedStaff.value = { ...staff };
+  selectedStaff.value = {
+    ...staff,
+    email: staff.email.replace('@fengjia.mbm.com', '')
+  };
 };
 
 
@@ -97,6 +102,26 @@ const handleSelection = (e) => {
 
 };
 
+const token = localStorage.getItem('stayToken');
+
+//檢查是否有token
+const checkAuth = async () => {
+  if (token) {
+    //如果token存在，則在刷新頁面時，不要求重新登入
+    const response = await axios.get('http://localhost:5001/api/protected', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    console.log(response.data.message);
+    authState.isAuthenticated = true;
+    getStaffName.name = response.data.user.name;
+    await router.push('/backend/login/staffManagement');
+  } else {
+    console.error('Token verification failed');
+    authState.isAuthenticated = false;
+    await router.push('/backend/login');
+  }
+};
+
 
 //搜尋
 const searchRes = (e) => {
@@ -108,6 +133,7 @@ const searchRes = (e) => {
 
 onMounted(() => {
   fetchStaffs();
+  checkAuth();
 });
 
 
@@ -128,7 +154,7 @@ onMounted(() => {
     <div class="tool justify-between">
 
       <form class="searchArea d-flex" @submit.prevent="searchRes">
-        <input class="form-control mr-sm-2" type="search" placeholder="輸入姓名或員編搜尋" aria-label="Search">
+        <input class="form-control mr-sm-2" type="search" placeholder="輸入姓名或員工編號" aria-label="Search">
         <button class="btn btn-success my-2 my-sm-0 m-2"  type="submit"><i class="fas fa-search p-2"></i></button>
       </form>
 

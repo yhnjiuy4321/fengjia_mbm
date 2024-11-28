@@ -10,10 +10,12 @@ import searchTicket from '../views/searchTicket.vue';
 import login from '../views/backend/loginView.vue';
 import ticketManage from '../views/backend/ticketManagement.vue';
 import staffManage from '../views/backend/staffManagement.vue';
+import AboutUs  from "@/views/aboutUs.vue";
+import ticketShop from "@/views/ticketShop.vue";
 import { authState } from '/Backend/auth.js';
 
 
-
+const token = localStorage.getItem('token');
 
 const routes = [
     {
@@ -50,6 +52,11 @@ const routes = [
         component: VenueTour
     },
     {
+        path: '/homepage/about',
+        name: '關於我們',
+        component: AboutUs
+    },
+    {
         path: '/homepage/service_rules',
         name: '規範&服務',
         component: service_rules
@@ -58,6 +65,11 @@ const routes = [
         path: '/homepage/searchTicket',
         name: '訂票查詢',
         component: searchTicket
+    },
+    {
+        path: '/homepage/TicketShop',
+        name: '線上購票',
+        component: ticketShop
     },
     {
         path: '/backend/login',
@@ -89,9 +101,13 @@ export default router;
 
 
 router.beforeEach((to, from, next) => {
-    if (to.meta.requiresAuth && !authState.isAuthenticated) {
-        next('/backend/login'); // Redirect to login page if not authenticated
-    } else {
-        next(); // Proceed to the requested route if authenticated or if the route does not require authentication
+    if (to.meta.requiresAuth && !authState.isAuthenticated && !token) {
+        next('/backend/login');
+    } else if(to.meta.requiresAuth && !authState.isAuthenticated && token){
+        authState.isAuthenticated = true;
+        next();
+    }
+    else {
+        next();
     }
 });

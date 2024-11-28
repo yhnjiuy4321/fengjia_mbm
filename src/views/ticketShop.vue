@@ -3,43 +3,30 @@ import pagehead from '@/components/header.vue'
 import pagefooter from '@/components/footer.vue'
 import carouselComponent from '@/components/carousel.vue'
 import menuComponent from '@/components/menu.vue'
-import { aboutusContent } from "@/data/aboutusContent.js";
-import {ref} from "vue";
-const aboutus = ref(aboutusContent);
 </script>
 
 <template>
-
   <pagehead/>
   <carouselComponent/>
-
 
   <div class="d-flex mt-5">
     <menuComponent/>
 
-    <div v-for="item in aboutus" :key="item.id" class="text-start w-100 p-5">
+    <div class="text-center w-100">
 
       <div class="title">
-        <h1>{{item.title}}</h1>
+        <h1>關於我們</h1>
       </div>
 
       <div class="content">
-
-        <div class="content_text">
-          <p>{{item.content}}</p>
-        </div>
+        <p>本公司成立於2021年，是一家專業的水族館公司，我們致力於提供最好的服務給顧客，讓顧客有一個愉快的參觀經驗。</p>
       </div>
 
     </div>
-
-
-
-
   </div>
 
 
   <pagefooter/>
-
 </template>
 
 <style scoped>

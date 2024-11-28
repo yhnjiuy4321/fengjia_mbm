@@ -3,11 +3,36 @@ import { ref, onMounted } from 'vue';
 import b_header from '@/components/b_header.vue'
 import b_menu from '@/components/b_menuBar.vue'
 import axios from 'axios'
+import router from "@/router/index.js";
+import {authState, getStaffName} from "../../../Backend/auth.js";
 
 const post = 5001
 
 const tickets = ref([])
 const originalTickets = ref([])
+const token = localStorage.getItem('stayToken')
+
+//檢查是否有token
+const checkAuth = async () => {
+  console.log('Retrieved token:', token)
+  if (token) {
+    try {
+      const response = await axios.get('http://localhost:5001/api/protected', {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      console.log(response.data.message)
+      authState.isAuthenticated = true
+      getStaffName.name = response.data.user.name
+      await router.push('/backend/login/ticketManagement')
+    } catch (error) {
+      console.error('Token verification failed:', error)
+      localStorage.removeItem('stayToken')
+      await router.push('/backend/login')
+    }
+  } else {
+    await router.push('/backend/login')
+  }
+}
 
 //抓取資料
 async function fetchTickets() {
@@ -106,7 +131,8 @@ const searchRes = (e) => {
 
 
 onMounted(() => {
-  fetchTickets()
+  fetchTickets();
+  checkAuth();
 })
 
 
@@ -126,7 +152,7 @@ onMounted(() => {
     <div class="tool justify-between">
 
       <form class="searchArea d-flex" @submit.prevent="searchRes">
-        <input class="form-control mr-sm-2" type="search" placeholder="輸入姓名或序號搜尋" aria-label="Search">
+        <input class="form-control mr-sm-2" type="search" placeholder="輸入姓名或訂單編號" aria-label="Search">
         <button class="btn btn-success my-2 my-sm-0"  type="submit"><i class="fas fa-search p-2"></i></button>
       </form>
 

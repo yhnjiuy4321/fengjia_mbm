@@ -4,6 +4,9 @@ import cors from 'cors';
 import { StaffModel } from './staffModel.js';// 替換為你自己創建的模型
 import { TicketModel } from './ticketModel.js';// 替換為你自己創建的模型
 const app = express();
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+const SECRET_KEY = 'your_secret_key'; // JWT 密鑰
 
 // 使用 CORS 來允許前端連接
 app.use(cors());
@@ -28,6 +31,7 @@ app.get('/api/data/member', async (req, res) => {
     }
 });
 
+
 // API獲取員工資料(用employeeId)
 app.get('/api/data/member/:employeeId', async (req, res) => {
     const employeeId = req.params.employeeId;
@@ -38,6 +42,7 @@ app.get('/api/data/member/:employeeId', async (req, res) => {
         res.status(500).json({error: err.message});
     }
 });
+
 
 // API刪除員工資料(用employeeId)
 app.delete('/api/data/member/:employeeId', async (req, res) => {
@@ -50,6 +55,7 @@ app.delete('/api/data/member/:employeeId', async (req, res) => {
     }
 });
 
+
 // API新增員工資料
 app.post('/api/data/member', async (req, res) => {
     const newStaff = req.body;
@@ -60,6 +66,7 @@ app.post('/api/data/member', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
 
 // API更新員工資料(用employeeId)
 app.put('/api/data/member/:employeeId', async (req, res) => {
@@ -74,6 +81,7 @@ app.put('/api/data/member/:employeeId', async (req, res) => {
     }
 });
 
+
 // API獲取票務資料
 app.get('/api/data/ticket', async (req, res) => {
     try {
@@ -84,6 +92,7 @@ app.get('/api/data/ticket', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
 
 // API新增票務資料
 app.post('/api/data/ticket', async (req, res) => {
@@ -96,6 +105,7 @@ app.post('/api/data/ticket', async (req, res) => {
     }
 });
 
+
 // API刪除票務資料(用ticketId)
 app.delete('/api/data/ticket/:ticketId', async (req, res) => {
     const ticketId = req.params.ticketId;
@@ -106,6 +116,7 @@ app.delete('/api/data/ticket/:ticketId', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
 
 // API查詢票務資料(用電話或身分證)
 app.get('/api/data/ticket/:phoneOrIdentity', async (req, res) => {
@@ -126,8 +137,8 @@ app.post('/api/login', async (req, res) => {
     try {
         const user = await StaffModel.findOne({ account, password });
         if (user) {
-            res.json({ success: true, message: 'Login successful', user });
-
+            const token = jwt.sign({ id: user._id, account: user.account }, SECRET_KEY, { expiresIn: '10min' });
+            res.json({ success: true, message: 'Login successful', token, user });
         } else {
             res.status(401).json({ success: false, message: 'Invalid credentials' });
         }
@@ -136,7 +147,35 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+
+// API驗證(token)
+app.get('/api/protected', (req, res) => {
+    const token = req.headers['authorization']?.split(' ')[1];
+    if (!token) {
+        console.error('No token provided');
+        return res.status(403).send({ message: 'No token provided' });
+    }
+    jwt.verify(token, SECRET_KEY, async (err, decoded) => {
+        if (err) {
+            console.error('Failed to authenticate token:', err);
+            return res.status(401).send({ message: 'Failed to authenticate token' });
+        }
+        try {
+            const user = await StaffModel.findById(new mongoose.Types.ObjectId(decoded.id));
+            if (!user) {
+                console.error('User not found');
+                return res.status(404).send({ message: 'User not found' });
+            }
+            res.status(200).send({ message: `Welcome, ${decoded.account}`, user });
+        } catch (err) {
+            console.error('Failed to retrieve user information:', err);
+            res.status(500).send({ message: 'Failed to retrieve user information' });
+        }
+    });
+});
+
 const PORT = process.env.PORT || 5001;
+
 
 // 啟動服務
 app.listen(PORT, () => {

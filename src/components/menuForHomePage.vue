@@ -20,6 +20,10 @@ const goToVenueTour = () => {
   router.push('/homepage/VenueTour')
 }
 
+const goToTicket = () => {
+  router.push('/homepage/ticketShop')
+}
+
 import { menu } from "@/data/homepage/menu.js";
 import {intro} from "@/data/homepage/sampleIntro.js";
 const menuList = menu
@@ -47,7 +51,7 @@ const menuList = menu
       <div class="col-12 col-md-6 col-lg-2 d-flex mt-4">
         <div class="card">
           <h5 class="card-title text-center">{{ menuItem.name2 }}</h5>
-          <div class="cover">
+          <div class="cover" @click="goToTicket">
             <img :src="menuItem.photo2" alt="...">
           </div>
         </div>

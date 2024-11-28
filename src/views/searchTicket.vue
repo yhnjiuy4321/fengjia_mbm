@@ -103,6 +103,7 @@ function searchGo() {
             <p>姓名: {{ticket.name}}</p>
             <p>性別: {{ticket.gender}}</p>
             <p>電話: {{ticket.phone}}</p>
+            <p>身分證: {{ticket.identity}}</p>
             <p>信箱: {{ticket.email}}</p>
             <p>參觀日期: {{ticket.visit_date}}</p>
             <p>購票日期: {{ticket.purchase_time}}</p>
@@ -176,5 +177,12 @@ i{
 .error{
   font-size: 20px;
   color: red;
+}
+
+.modal-body{
+  overflow-y: auto;
+  max-height: 300px;
+  margin-bottom: 10px;
+
 }
 </style>
