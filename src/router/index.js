@@ -14,7 +14,6 @@ import AboutUs  from "@/views/aboutUs.vue";
 import ticketShop from "@/views/ticketShop.vue";
 import { authState } from '/Backend/auth.js';
 
-
 const token = localStorage.getItem('token');
 
 const routes = [
@@ -95,19 +94,19 @@ const router = createRouter({
 });
 
 
-
-
 export default router;
 
-
+//路由守衛，判斷是否登入，若未登入則導向登入頁面
 router.beforeEach((to, from, next) => {
-    if (to.meta.requiresAuth && !authState.isAuthenticated && !token) {
+    if (to.meta.requiresAuth && !authState.isAuthenticated && !token) { //條件：需要登入、未登入、沒有token
         next('/backend/login');
+
+    //若已登入，則放行，就算重新整理也不會跳回登入頁面
     } else if(to.meta.requiresAuth && !authState.isAuthenticated && token){
         authState.isAuthenticated = true;
         next();
     }
     else {
-        next();
+        next(); //放行
     }
 });

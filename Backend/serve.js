@@ -5,7 +5,6 @@ import { StaffModel } from './staffModel.js';// 替換為你自己創建的模�
 import { TicketModel } from './ticketModel.js';// 替換為你自己創建的模型
 const app = express();
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
 const SECRET_KEY = 'your_secret_key'; // JWT 密鑰
 
 // 使用 CORS 來允許前端連接
@@ -137,7 +136,7 @@ app.post('/api/login', async (req, res) => {
     try {
         const user = await StaffModel.findOne({ account, password });
         if (user) {
-            const token = jwt.sign({ id: user._id, account: user.account }, SECRET_KEY, { expiresIn: '10min' });
+            const token = jwt.sign({ id: user._id, account: user.account }, SECRET_KEY, { expiresIn: '5min' });//expiresIn: '5min'表示token有效期為5分鐘
             res.json({ success: true, message: 'Login successful', token, user });
         } else {
             res.status(401).json({ success: false, message: 'Invalid credentials' });
