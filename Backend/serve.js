@@ -58,8 +58,11 @@ app.delete('/api/data/member/:employeeId', async (req, res) => {
 // API新增員工資料
 app.post('/api/data/member', async (req, res) => {
     const newStaff = req.body;
+    newStaff.email = newStaff.email+'@fengjia.mbm.com';
+    newStaff.account=newStaff.employeeId
     try {
         const data = await StaffModel.create(newStaff);
+
         res.json(data);
     } catch (err) {
         res.status(500).json({ error: err.message });

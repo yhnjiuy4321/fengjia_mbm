@@ -26,6 +26,7 @@ const selectedStaff = ref({
   hireDate: '',
   account: '',
   password: ''
+
 });
 
 //抓取資料
@@ -38,6 +39,29 @@ async function fetchStaffs() {
     console.error('Error fetching staff data:', error);
   }
 }
+
+//新增資料
+const newStaff = ref({
+  employeeId : '',
+  name: '',
+  gender: '',
+  email: '',
+  phone: '',
+  hireDate: '',
+  password: '',
+  //account: ''
+});
+
+const create = async () => {
+  try {
+    await axios.post(`http://localhost:${post}/api/data/member`, newStaff.value);
+    await fetchStaffs();
+    alert('新增成功，請返回頁面確認');
+  } catch (error) {
+    console.error('Error creating staff:', error);
+  }
+};
+
 
 //刪除資料(抓employeeId)
 const deleteItem = async (employeeId) => {
@@ -159,7 +183,7 @@ onMounted(() => {
       </form>
 
 
-      <button class="btn btn-primary d-flex" data-bs-toggle="tooltip" title="新增人員"><i class="fas fa-plus"></i><br><i class="fas fa-user"></i></button>
+      <button class="btn btn-primary d-flex" data-bs-toggle="modal" title="新增人員"  data-bs-target="#createModal" ><i class="fas fa-plus"></i><br><i class="fas fa-user"></i></button>
 
       <select class="form-select w-25"  @change="handleSelection" >
         <option  disabled selected  >--篩選--</option>
@@ -192,7 +216,7 @@ onMounted(() => {
           <td>{{ new Date(staff.hireDate).toLocaleDateString() }}</td>
           <td>
             <div class="d-flex">
-              <button class="btn btn-primary w-100 m-1" data-bs-toggle="modal" title="編輯" data-bs-target="#profileModal" @click="editStaff(staff)"><i class="fas fa-edit"></i></button>
+              <button class="btn btn-info w-100 m-1" data-bs-toggle="modal" title="編輯" data-bs-target="#profileModal" @click="editStaff(staff)"><i class="fas fa-edit"></i></button>
               <button class="btn btn-danger w-100 m-1" data-bs-toggle="tooltip" title="刪除" @click="deleteItem(staff.employeeId)"><i class="fas fa-trash-alt"></i></button>
             </div>
           </td>
@@ -200,6 +224,79 @@ onMounted(() => {
       </table>
     </div>
 
+
+    <!-- 新增Modal -->
+    <div class="modal fade" id="createModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h4 class="modal-title">新增人員</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body">
+            <form @submit.prevent="create">
+
+              <div class="form-group ">
+                <label for="id">員編:</label>
+                <input type="text" class="form-control" id="id" v-model="newStaff.employeeId">
+              </div>
+              <div class="form-group ">
+                <label for="name">姓名:</label>
+                <input type="text" class="form-control" id="name" v-model="newStaff.name">
+              </div>
+              <div class="form-group d-flex w-100">
+                <label for="gender">性別:</label>
+                <div class="radioButton">
+                  <input   type="radio" id="gender" value="男" v-model="newStaff.gender">
+                  <label for="male">男</label>
+                </div>
+                <div class="radioButton d-flex">
+                  <input   type="radio" id="gender" value="女" v-model="newStaff.gender">
+                  <label for="female">女</label>
+                </div>
+
+              </div>
+              <div class="form-group">
+                <label for="tel">電話:</label>
+                <input type="text" class="form-control" id="tel" v-model="newStaff.phone">
+              </div>
+              <div class="form-group">
+                <label for="email">Email:</label>
+                <div class="d-flex">
+                <input type="text" class="form-control" id="email" v-model="newStaff.email">
+                <span class="companyEmail">@fengjia.mbm.com</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="date">到職時間:</label>
+                <input type="date" class="form-control" id="date" v-model="newStaff.hireDate">
+              </div>
+<!--              <div class="form-group">
+                <label for="account">帳號(同員編):</label>
+                <input type="text" class="form-control" id="account" v-model="newStaff.account" disabled>
+              </div>-->
+
+              <div class="form-group">
+                <label for="password">密碼:</label>
+                <input type="text" class="form-control" id="password" v-model="newStaff.password">
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger w-25" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary w-25" data-bs-dismiss="modal" @click="create">新增</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <!-- 更新Modal -->
     <div class="modal fade" id="profileModal">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -224,7 +321,7 @@ onMounted(() => {
               <div class="mb-3">
                 <label for="email" class="form-label text-dark">信箱</label>
                 <div class="d-flex">
-                <input type="text" class="form-control " id="email" v-model="selectedStaff.email">
+                <input type="text" class="form-control" id="email" v-model="selectedStaff.email">
                   <span class="companyEmail">@fengjia.mbm.com</span>
                   </div>
               </div>
@@ -242,12 +339,12 @@ onMounted(() => {
               </div>
               <div class="mb-3">
                 <label for="hireDate" class="form-label text-dark">密碼</label>
-                <input type="text" class="form-control" id="hireDate" v-model="selectedStaff.password" disabled>
+                <input type="text" class="form-control" id="hireDate" v-model="selectedStaff.password">
               </div>
 
           <div class="modal-footer">
             <button type="button" class="btn btn-danger w-25" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary w-25">Save</button>
+            <button type="submit" class="btn btn-primary w-25" data-bs-dismiss="modal">Save</button>
           </div>
             </form>
         </div>
@@ -332,5 +429,19 @@ button .fas{
   display: flex;
   align-items: center;
   margin-left: 5px;
+}
+
+.form-group.d-flex {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.radioButton{
+  margin-right: 20px;
+  margin-left: 20px;
+}
+
+.form-group .form-control{
+  margin-bottom: 10px;
 }
 </style>

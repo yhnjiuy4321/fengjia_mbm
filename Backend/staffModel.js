@@ -1,16 +1,25 @@
 import mongoose from 'mongoose';
 
 const staffSchema = new mongoose.Schema({
-    employeeId: String,
+    employeeId: {
+        type: String,
+        unique: true,
+    },
     name: String,
     gender: String,
-    email: String,
-    phone: String,
+    email: {
+        type: String,
+        unique: true,
+    },
+    phone: {
+        type: String,
+        unique: true,
+    },
     hireDate: String,
     account: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
     },
     password: {
         type: String,
