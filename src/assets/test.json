@@ -1,0 +1,13 @@
+{
+  "name": "王大陸",
+  "gender": "male",
+  "id": "L224567860",
+  "birthdate": "1990-01-12",
+  "phone": "0912345678",
+  "visitDate": "2024-12-01",
+  "tickets": {
+    "adult": 1,
+    "senior": 1,
+    "child": 1
+  }
+}

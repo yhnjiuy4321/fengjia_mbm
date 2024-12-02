@@ -12,6 +12,9 @@ import ticketManage from '../views/backend/ticketManagement.vue';
 import staffManage from '../views/backend/staffManagement.vue';
 import AboutUs  from "@/views/aboutUs.vue";
 import ticketShop from "@/views/ticketShop.vue";
+import bio from '../views/bioIdentiy.vue';
+import bookingPage from '../views/OnlineBookingSystem.vue';
+
 import { authState } from '/Backend/auth.js';
 
 const token = localStorage.getItem('token');
@@ -62,6 +65,10 @@ const routes = [
     },
     {
         path: '/homepage/searchTicket',
+
+    },
+    {
+        path: '/homepage/searchTicket',
         name: '訂票查詢',
         component: searchTicket
     },
@@ -69,6 +76,17 @@ const routes = [
         path: '/homepage/TicketShop',
         name: '線上購票',
         component: ticketShop
+    },
+    {
+        path: '/homepage/bookingPage',
+        name: '線上訂票',
+        component: bookingPage
+    },
+    {
+
+        path: '/homepage/bioIdentiy',
+        name: '互動專區',
+        component: bio
     },
     {
         path: '/backend/login',
