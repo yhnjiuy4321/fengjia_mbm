@@ -7,6 +7,7 @@ const app = express();
 import jwt from 'jsonwebtoken';
 const SECRET_KEY = 'your_secret_key'; // JWT 密鑰
 
+
 // 使用 CORS 來允許前端連接
 app.use(cors());
 app.use(express.json()); // 解析 JSON 請求體
@@ -112,7 +113,7 @@ app.post('/api/data/ticket', async (req, res) => {
 app.delete('/api/data/ticket/:ticketId', async (req, res) => {
     const ticketId = req.params.ticketId;
     try {
-        const data = await TicketModel.deleteOne({ ticketId: ticketId });
+        const data = await TicketModel.deleteOne({ identity: ticketId });
         res.json(data);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -175,6 +176,9 @@ app.get('/api/protected', (req, res) => {
         }
     });
 });
+
+
+
 
 const PORT = process.env.PORT || 5001;
 

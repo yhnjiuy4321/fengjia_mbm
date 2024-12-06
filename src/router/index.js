@@ -83,6 +83,14 @@ const routes = [
         component: bookingPage
     },
     {
+        path: '/confirm',
+        component: bookingPage, // 使用同一個組件
+        props: route => ({        // 通過 props 傳遞參數
+            transactionId: route.query.transactionId,
+            orderId: route.query.orderId
+        })
+    },
+    {
 
         path: '/homepage/bioIdentiy',
         name: '互動專區',

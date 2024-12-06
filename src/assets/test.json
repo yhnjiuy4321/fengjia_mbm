@@ -1,13 +1,14 @@
-{
+[
+  {
   "name": "王大陸",
   "gender": "male",
-  "id": "L224567860",
+  "identity": "L224567860",
   "birthdate": "1990-01-12",
   "phone": "0912345678",
-  "visitDate": "2024-12-01",
-  "tickets": {
-    "adult": 1,
-    "senior": 1,
-    "child": 1
-  }
+  "visit_date": "2024-12-01",
+  "purchase_time": "2024-11-01",
+  "adultTicket": 0,
+  "childTicket": 0,
+  "elderlyTicket": 0
 }
+  ]

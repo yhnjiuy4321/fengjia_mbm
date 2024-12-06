@@ -4,7 +4,6 @@
   <div class="container">
     <div class="header">線上訂票系統</div>
     <form @submit.prevent="submitOrder">
-
       <div class="form-group">
         <label>購票人姓名：</label>
         <input type="text" v-model="formData.name" placeholder="輸入姓名" />
@@ -23,7 +22,7 @@
       </div>
       <div class="form-group">
         <label>購票人身分證：</label>
-        <input type="text" v-model="formData.id" placeholder="輸入身分證" @input="handleIdInput" maxlength="10" />
+        <input type="text" v-model="formData.identity" placeholder="輸入身分證" @input="handleIdInput" maxlength="10" />
         <span class="error-message" v-if="errors.id">{{ errors.id }}</span>
       </div>
       <div class="form-group">
@@ -40,8 +39,8 @@
 
       <div class="form-group">
         <label>參觀日期：</label>
-        <input type="date" v-model="formData.visitDate" />
-        <span class="error-message" v-if="errors.visitDate">{{ errors.visitDate }}</span>
+        <input type="date" v-model="formData.visit_date" />
+        <span class="error-message" v-if="errors.visit_date">{{ errors.visit_date }}</span>
       </div>
 
       <div class="form-group">
@@ -49,19 +48,19 @@
         <div class="ticket-type">
           <span>全票</span>
           <button type="button" @click="adjustCount('adult', 1)">+</button>
-          <span class="ticket-count">{{ formData.tickets.adult }}</span>
+          <span class="ticket-count">{{ formData.adultTicket }}</span>
           <button type="button" @click="adjustCount('adult', -1)">-</button>
         </div>
         <div class="ticket-type">
           <span>敬老</span>
           <button type="button" @click="adjustCount('senior', 1)">+</button>
-          <span class="ticket-count">{{ formData.tickets.senior }}</span>
+          <span class="ticket-count">{{ formData.elderlyTicket }}</span>
           <button type="button" @click="adjustCount('senior', -1)">-</button>
         </div>
         <div class="ticket-type">
           <span>兒童</span>
           <button type="button" @click="adjustCount('child', 1)">+</button>
-          <span class="ticket-count">{{ formData.tickets.child }}</span>
+          <span class="ticket-count">{{ formData.childTicket }}</span>
           <button type="button" @click="adjustCount('child', -1)">-</button>
         </div>
         <span class="error-message" v-if="errors.tickets">{{ errors.tickets }}</span>
@@ -69,7 +68,7 @@
 
       <div class="buttons">
         <button type="button" @click="resetForm">返回</button>
-        <button type="submit">確認送出</button>
+        <button type="submit" @click="submitOrder">確認送出</button>
       </div>
     </form>
 
@@ -102,7 +101,7 @@
               </div>
               <div class="info-item">
                 <span class="label">身分證：</span>
-                <span class="value">{{ formData.id }}</span>
+                <span class="value">{{ formData.identity }}</span>
               </div>
               <div class="info-item">
                 <span class="label">出生日期：</span>
@@ -114,7 +113,7 @@
               </div>
               <div class="info-item">
                 <span class="label">參觀日期：</span>
-                <span class="value">{{ formData.visitDate }}</span>
+                <span class="value">{{ formData.visit_date }}</span>
               </div>
             </div>
           </div>
@@ -124,15 +123,15 @@
             <div class="ticket-details">
               <div class="ticket-item">
                 <span>全票</span>
-                <span class="ticket-count">{{ formData.tickets.adult }} 張</span>
+                <span class="ticket-count">{{ formData.adultTicket }} 張</span>
               </div>
               <div class="ticket-item">
                 <span>敬老票</span>
-                <span class="ticket-count">{{ formData.tickets.senior }} 張</span>
+                <span class="ticket-count">{{ formData.childTicket }} 張</span>
               </div>
               <div class="ticket-item">
                 <span>兒童票</span>
-                <span class="ticket-count">{{ formData.tickets.child }} 張</span>
+                <span class="ticket-count">{{ formData.elderlyTicket }} 張</span>
               </div>
             </div>
             <div class="total-amount">
@@ -177,324 +176,351 @@
   </div>
 </template>
 
-<script>
-import axios from 'axios';
-import test from '@/assets/test.json'
+<script setup>
+  import {ref, reactive, computed, onMounted, onBeforeUnmount} from 'vue';
+  import axios from 'axios';
+  import test from '@/assets/test.json';
+  import { ticketInfo } from "@/data/ticketInfo.js";
+  import router from "@/router/index.js";
+  const ticketData = ref(ticketInfo);
 
-export default {
 
-  props: {
-    transactionId: String,
-    orderId: String
-  },
-  data() {
-    return {
-      formData: process.env.NODE_ENV === 'development' ? test : {
-        name: '',
-        gender: '',
-        id: '',
-        birthdate: '',
-        phone: '',
-        visitDate: '',
-        tickets: {adult: 0, senior: 0, child: 0},
-      },
-      countdown: 20, // 5分鐘 = 300秒
-      countdownTimer: null,
-      errors: {
-        name: '',
-        id: '',
-        phone: '',
-        birthdate: '',
-        visitDate: '',
-      },
-      totalAmount: 0, // 新增屬性來保存總金額
-      showSummary: false,
-      paymentComplete: false,
-      orderNumber: null,
-    };
-  },
-  beforeUnmount() {
-    if (this.countdownTimer) {
-      clearInterval(this.countdownTimer);
-      this.countdownTimer = null;
+
+
+  // 定義 props
+  const props = defineProps({
+  transactionId: String,
+  orderId: String
+});
+
+
+
+
+  // 定義 reactive 和 ref
+  const formData = ref( {
+  ticketId:'',
+  name: '',
+  gender: '',
+  identity: '',
+  birthdate: '',
+  phone: '',
+  visit_date: '',
+  purchase_time: new Date().toISOString(),//購買時間，預設為當下時間
+  adultTicket: 0,
+  childTicket: 0,
+  elderlyTicket: 0
+});
+
+
+  //這個是要存入資料庫的資料
+  const saveTicketData = ref ({
+    ticketId:'',
+    name: '',
+    gender: '',
+    identity: '',
+    birthdate: '',
+    phone: '',
+    visit_date: '',
+    purchase_time: new Date().toISOString(),//購買時間，預設為當下時間
+    adultTicket: 0,
+    childTicket: 0,
+    elderlyTicket: 0
+  });
+
+
+  const sendToMongo = async () => {
+    try {
+      const response = await axios.post('http://localhost:5001/api/data/ticket', saveTicketInfo.value);
+      console.log('response:', response.data);
+    } catch (error) {
+      console.error('資料庫錯誤:', error.response?.data || error.message);
+      alert('資料庫錯誤，請稍後再試。');
     }
-  },
-  computed: {
-    isCountdownWarning() {
-      return this.countdown <= 60;
-    }
-  },
 
-  created() {
-    // 如果有交易 ID 和訂單 ID，表示是支付回調
-    if (this.transactionId && this.orderId) {
-      this.handlePaymentCallback(this.transactionId, this.orderId);
+  }
+
+  //關閉訂單確認彈窗
+  const closeSummary = () => {
+    showSummary.value = false;
+    clearInterval(countdownTimer);
+    countdownTimer = null;
+  }
+
+
+  //時間倒數
+  const countdown = ref(300); // 倒數時間
+  let countdownTimer = null;
+
+  // 錯誤訊息
+  const errors = reactive({
+  name: '',
+  id: '',
+  phone: '',
+  birthdate: '',
+  visit_date: '',
+});
+
+  const totalAmount = ref(0); // 保存總金額
+  const showSummary = ref(false);
+  const paymentComplete = ref(false);
+  const orderNumber = ref(null);
+
+  // 計算倒數警告
+  const isCountdownWarning = computed(() => countdown.value <= 60);
+
+  //函式: 重置表單
+  function resetForm() {
+  Object.assign(formData.value, {
+    name: '',
+    gender: '',
+    identity: '',
+    birthdate: '',
+    phone: '',
+    visit_date: '',
+    adultTicket: 0,
+    childTicket: 0,
+    elderlyTicket: 0
+  });
+  totalAmount.value = 0;
+  window.scrollTo(0, 0);
+  router.push('/homepage/TicketShop');
+}
+
+
+// 處理時間倒數
+  function startCountdown() {
+  if (countdownTimer) {
+  clearInterval(countdownTimer);
+}
+  countdownTimer = setInterval(() => {
+  if (countdown.value > 0) {
+  countdown.value--;
+} else {
+  handleTimeout();
+}
+}, 1000);
+}
+
+  function handleTimeout() {
+  clearInterval(countdownTimer);
+  countdownTimer = null;
+  if (confirm('已超過付款時間，請按確認返回主頁面')) {
+  resetForm();
+  }
+}
+
+// 處理時間格式
+  function formatTime(seconds) {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+}
+
+//票券數量增減
+  function adjustCount(type, change) {
+    if (type === 'adult') {
+      formData.value.adultTicket = Math.max(0, Math.min(99, formData.value.adultTicket + change));
+    } else if (type === 'senior') {
+      formData.value.elderlyTicket = Math.max(0, Math.min(99, formData.value.elderlyTicket + change));
+    } else if (type === 'child') {
+      formData.value.childTicket = Math.max(0, Math.min(99, formData.value.childTicket + change));
+    }
+  }
+
+  // 處理票數變動
+  function calculateTotalAmount() {
+    let total = 0;
+
+    ticketInfo.forEach(ticket => {
+      if (ticket.type === '全票') {
+        total += ticket.price * formData.value.adultTicket;
+      } else if (ticket.type === '敬老票') {
+        total += ticket.price * formData.value.elderlyTicket;
+      } else if (ticket.type === '兒童票') {
+        total += ticket.price * formData.value.childTicket;
+      }
+    });
+
+    totalAmount.value = total;
+  }
+
+  //這裡是處理付款回調，這裡是要連接到後端的
+  async function handlePaymentCallback(transactionId, orderId) {
+
+  try {
+    const orderInfo = JSON.parse(localStorage.getItem('currentOrder'));
+
+  if (!orderInfo) throw new Error('找不到訂單資訊');
+
+
+  const response = await axios.get('http://localhost:3000/confirm', {
+  params: {
+  transactionId,
+  orderId,
+  amount: orderInfo.amount,
+},
+});
+
+  if (response.data.success) {
+  orderNumber.value = orderId;
+  console.log('orderId:', orderId+'transactionId:', transactionId);
+  paymentComplete.value = true;
+  //await sendToMongo();//
+  localStorage.removeItem('currentOrder');
+} else {
+  throw new Error('付款確認失敗');
+}
+} catch (error) {
+  console.error('處理付款回調時出錯:', error);
+  alert('付款處理失敗，請聯繫客服');
+}
+}
+
+  function closePaymentComplete() {
+  paymentComplete.value = false;
+  resetForm();
+  router.push('/homepage/TicketShop');
+}
+
+// 確認付款
+  async function confirmPayment() {
+  try {
+  const response = await axios.post('http://localhost:3000/create-payment', {
+  amount: totalAmount.value,
+  orderInfo: {
+  name: formData.value.name,
+  gender: formData.value.gender,
+  identity: formData.value.identity,
+  phone: formData.value.phone,
+  birthdate: formData.value.birthdate,
+  visit_date: formData.value.visit_date,
+  adultTicket: formData.value.adultTicket,
+  childTicket: formData.value.childTicket,
+  elderlyTicket: formData.value.elderlyTicket,
+},
+});
+
+  if (response.data.paymentUrl) {
+  localStorage.setItem('currentOrder', JSON.stringify({
+  orderId: response.data.orderId,
+  transactionId: response.data.transactionId,
+  amount: totalAmount.value,
+}));
+  saveTicketData.value.ticketId = response.data.orderId;
+  window.location.href = response.data.paymentUrl;
+  console.log('response:', response.data);
+
+} else {
+  throw new Error('未收到有效的付款 URL');
+}
+} catch (error) {
+  console.error('付款錯誤:', error.response?.data || error.message);
+  alert('付款失敗，請稍後再試。');
+}
+}
+
+
+  function validateForm() {
+  let isValid = true;
+
+  Object.assign(errors, {
+  name: '',
+  gender: '',
+  id: '',
+  birthdate: '',
+  phone: '',
+  visit_date: '',
+  adultTicket: '',
+  childTicket: '',
+  elderlyTicket: '',
+});
+
+  if (!formData.value.name.trim()) {
+  errors.name = '請輸入姓名';
+  isValid = false;
+}
+
+  if (!formData.value.gender) {
+  errors.gender = '請選擇性別';
+  isValid = false;
+}
+
+  if (!formData.value.identity) {
+  errors.id = '請輸入身分證字號';
+  isValid = false;
+} else if (!validateID(formData.value.identity)) {
+  errors.id = '請輸入正確的身分證字號';
+  isValid = false;
+}
+
+  if (!formData.value.birthdate) {
+  errors.birthdate = '請選擇出生日期';
+  isValid = false;
+}
+
+  if (!formData.value.phone) {
+  errors.phone = '請輸入手機號碼';
+  isValid = false;
+} else if (!validatePhone(formData.value.phone)) {
+  errors.phone = '請輸入正確的手機號碼格式';
+  isValid = false;
+}
+
+  if (!formData.value.visit_date) {
+  errors.visit_date = '請選擇參觀日期';
+  isValid = false;
+}
+
+  const totalTickets =
+  formData.value.adultTicket + formData.value.childTicket + formData.value.elderlyTicket;
+
+  if (totalTickets <= 0) {
+  errors.tickets = '請至少選擇一張票券';
+  isValid = false;
+}
+
+  return isValid;
+}
+
+  function validateID(id) {
+  const idRegex = /^[A-Z][12]\d{8}$/;
+  return idRegex.test(id);
+}
+
+  function validatePhone(phone) {
+  const phoneRegex = /^09\d{8}$/;
+  return phoneRegex.test(phone);
+}
+
+  function submitOrder() {
+    if (validateForm()) {
+      calculateTotalAmount();
+      showSummary.value = true;
+      startCountdown();
+      saveTicketData.value = formData.value;
+    }
+  }
+
+  onMounted(() => {
+    if (props.transactionId && props.orderId) {
+      handlePaymentCallback(props.transactionId, props.orderId);
     } else {
-      // 檢查 URL 參數
       const urlParams = new URLSearchParams(window.location.search);
       const urlTransactionId = urlParams.get('transactionId');
       const urlOrderId = urlParams.get('orderId');
 
       if (urlTransactionId && urlOrderId) {
-        this.handlePaymentCallback(urlTransactionId, urlOrderId);
+        handlePaymentCallback(urlTransactionId, urlOrderId);
       }
     }
-  },
-  methods: {
-    // 重置表單
-    resetForm() {
-      this.formData = {
-        name: '',
-        gender: '',
-        id: '',
-        birthdate: '',
-        phone: '',
-        visitDate: '',
-        tickets: {adult: 0, senior: 0, child: 0},
-      };
-      this.totalAmount = 0;
-
-      // 導航回主頁面
-      window.scrollTo(0, 0);
-      this.$router.push('/homepage/TicketShop');  // 假設主頁面的路由是 '/'
-    },
-
-    startCountdown() {
-      if (this.countdownTimer) {
-        clearInterval(this.countdownTimer);
-      }
-      this.countdown = 300;
-      this.countdownTimer = setInterval(() => {
-        if (this.countdown > 0) {
-          this.countdown--;
-        } else {
-          this.handleTimeout();
-        }
-      }, 1000);
-    },
-
-    handleTimeout() {
-      clearInterval(this.countdownTimer);
-      this.countdownTimer = null;
-
-      // 使用 confirm 讓用戶確認
-      if (confirm('已超過付款時間，請按確認返回主頁面')) {
-        this.resetForm();
-      }
-    },
-
-    formatTime(seconds) {
-      const minutes = Math.floor(seconds / 60);
-      const remainingSeconds = seconds % 60;
-      return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
-    },
-    // 調整票券數量
-    adjustCount(type, amount) {
-      if (this.formData.tickets[type] + amount >= 0) {
-        this.formData.tickets[type] += amount;
-      }
-    },
-
-    // 計算總金額
-    calculateTotalAmount() {
-      const ticketPrices = {
-        adult: 300,  // 全票價格
-        senior: 130, // 敬老票價格
-        child: 150,  // 兒童票價格
-      };
-
-      this.totalAmount =
-          this.formData.tickets.adult * ticketPrices.adult +
-          this.formData.tickets.senior * ticketPrices.senior +
-          this.formData.tickets.child * ticketPrices.child;
-    },
+  });
 
 
-
-
-    // 添加處理付款回調的方法
-    async handlePaymentCallback(transactionId, orderId) {
-      try {
-        // 從 localStorage 獲取訂單資訊
-        const orderInfo = JSON.parse(localStorage.getItem('currentOrder'));
-
-        if (!orderInfo) {
-          throw new Error('找不到訂單資訊');
-        }
-
-        // 確認付款
-        const response = await axios.get(`http://localhost:3000/confirm`, {
-          params: {
-            transactionId,
-            orderId,
-            amount: orderInfo.amount
-          }
-        });
-
-        if (response.data.success) {
-          // 設置訂單編號
-          this.orderNumber = orderId;
-          // 顯示完成訂單彈窗
-          this.paymentComplete = true;
-          // 清除訂單資訊
-          localStorage.removeItem('currentOrder');
-        } else {
-          throw new Error('付款確認失敗');
-        }
-      } catch (error) {
-        console.error('處理付款回調時出錯:', error);
-        alert('付款處理失敗，請聯繫客服');
-      }
-    },
-
-    // 關閉訂單確認彈窗
-    closePaymentComplete() {
-      this.paymentComplete = false;
-      this.resetForm();
-      this.$router.push('/homepage/TicketShop');  // 添加這一行
-      // 清除 URL 參數
-      window.history.replaceState({}, document.title, window.location.pathname);
-    },
-
-    // 確認付款
-    async confirmPayment() {
-      try {
-        const response = await axios.post('http://localhost:3000/create-payment', {
-          amount: this.totalAmount,
-          orderInfo: {
-            name: this.formData.name,
-            phone: this.formData.phone,
-            visitDate: this.formData.visitDate,
-            tickets: this.formData.tickets,
-          }
-        });
-
-        if (response.data.paymentUrl) {
-          // 儲存訂單資訊
-          localStorage.setItem('currentOrder', JSON.stringify({
-            orderId: response.data.orderId,
-            transactionId: response.data.transactionId,
-            amount: this.totalAmount
-          }));
-
-          // 跳轉至 LINE Pay 付款頁面
-          window.location.href = response.data.paymentUrl;
-        } else {
-          throw new Error('未收到有效的付款 URL');
-        }
-      } catch (error) {
-        console.error('付款錯誤:', error.response?.data || error.message);
-        alert('付款失敗，請稍後再試。');
-      }
-    },
-
-    closeSummary() {
-      this.showSummary = false;
-      if (this.countdownTimer) {
-        clearInterval(this.countdownTimer);
-        this.countdownTimer = null;
-      }
-    },
-
-
-    validateForm() {
-      let isValid = true;
-      // 重置所有錯誤訊息
-      this.errors = {
-        name: '',
-        gender: '',
-        id: '',
-        birthdate: '',
-        phone: '',
-        visitDate: '',
-        tickets: ''
-      };
-
-      // 驗證姓名
-      if (!this.formData.name.trim()) {
-        this.errors.name = '請輸入姓名';
-        isValid = false;
-      }
-
-      // 驗證性別
-      if (!this.formData.gender) {
-        this.errors.gender = '請選擇性別';
-        isValid = false;
-      }
-
-      // 驗證身分證
-      if (!this.formData.id) {
-        this.errors.id = '請輸入身分證字號';
-        isValid = false;
-      } else if (!this.validateID(this.formData.id)) {
-        this.errors.id = '請輸入正確的身分證字號';
-        isValid = false;
-      }
-
-      // 驗證生日
-      if (!this.formData.birthdate) {
-        this.errors.birthdate = '請選擇出生日期';
-        isValid = false;
-      }
-
-      // 驗證手機
-      if (!this.formData.phone) {
-        this.errors.phone = '請輸入手機號碼';
-        isValid = false;
-      } else if (!this.validatePhone(this.formData.phone)) {
-        this.errors.phone = '請輸入正確的手機號碼格式';
-        isValid = false;
-      }
-
-      // 驗證參觀日期
-      if (!this.formData.visitDate) {
-        this.errors.visitDate = '請選擇參觀日期';
-        isValid = false;
-      }
-
-      // 驗證票數
-      const totalTickets =
-          this.formData.tickets.adult +
-          this.formData.tickets.senior +
-          this.formData.tickets.child;
-
-      if (totalTickets <= 0) {
-        this.errors.tickets = '請至少選擇一張票券';
-        isValid = false;
-      }
-
-      return isValid;
-    },
-
-    validateID(id) {
-      const idRegex = /^[A-Z][12]\d{8}$/;
-      return idRegex.test(id);
-    },
-
-    validatePhone(phone) {
-      const phoneRegex = /^09\d{8}$/;
-      return phoneRegex.test(phone);
-    },
-
-    handleIdInput(event) {
-      this.formData.id = this.formData.id.toUpperCase();
-    },
-
-    handlePhoneInput(event) {
-      this.formData.phone = this.formData.phone.replace(/\D/g, '');
-    },
-
-    submitOrder() {
-      if (this.validateForm()) {
-        this.calculateTotalAmount();
-        this.showSummary = true;
-        this.startCountdown(); // 開始倒數計時
-      }
-    },
-  },
-
-};
-
+  onBeforeUnmount(() => {
+  if (countdownTimer) {
+  clearInterval(countdownTimer);
+}
+});
 </script>
 
 <style scoped>
@@ -521,10 +547,12 @@ export default {
   border-radius: 15px 15px 0 0;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
 .required {
   color: #dc3545;
   margin-left: 4px;
 }
+
 /* 錯誤輸入框樣式 */
 .error-message {
   color: #dc3545;
@@ -669,6 +697,7 @@ input {
   text-align: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
 .total-amount {
   margin-top: 20px;
   padding: 15px 20px;
@@ -714,6 +743,7 @@ input {
   transform: translateY(-2px);
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
+
 /* 按鈕美化 */
 .buttons {
   display: flex;
