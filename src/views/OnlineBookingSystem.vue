@@ -228,17 +228,6 @@
   });
 
 
-  const sendToMongo = async () => {
-    try {
-      const response = await axios.post('http://localhost:5001/api/data/ticket', saveTicketInfo.value);
-      console.log('response:', response.data);
-    } catch (error) {
-      console.error('資料庫錯誤:', error.response?.data || error.message);
-      alert('資料庫錯誤，請稍後再試。');
-    }
-
-  }
-
   //關閉訂單確認彈窗
   const closeSummary = () => {
     showSummary.value = false;
@@ -368,7 +357,7 @@
   //await sendToMongo();//
   localStorage.removeItem('currentOrder');
 } else {
-  throw new Error('付款確認失敗');
+  throw new Error('付款失敗');
 }
 } catch (error) {
   console.error('處理付款回調時出錯:', error);
@@ -388,6 +377,7 @@
   const response = await axios.post('http://localhost:3000/create-payment', {
   amount: totalAmount.value,
   orderInfo: {
+  ticketId: '',
   name: formData.value.name,
   gender: formData.value.gender,
   identity: formData.value.identity,
@@ -397,6 +387,7 @@
   adultTicket: formData.value.adultTicket,
   childTicket: formData.value.childTicket,
   elderlyTicket: formData.value.elderlyTicket,
+  purchase_time: formData.value.purchase_time,
 },
 });
 

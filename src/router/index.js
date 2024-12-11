@@ -65,10 +65,6 @@ const routes = [
     },
     {
         path: '/homepage/searchTicket',
-
-    },
-    {
-        path: '/homepage/searchTicket',
         name: '訂票查詢',
         component: searchTicket
     },

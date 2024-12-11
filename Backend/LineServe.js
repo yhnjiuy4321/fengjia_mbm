@@ -10,19 +10,9 @@ const port = 3000;
 
 
 
-const sendToMongo = async () => {
-    try {
-        const response = await axios.post('http://localhost:5001/api/data/ticket', saveTicketInfo.value);
-        console.log('response:', response.data);
-    } catch (error) {
-        console.error('資料庫錯誤:', error.response?.data || error.message);
-        alert('資料庫錯誤，請稍後再試。');
-    }
-
-}
-
 const orderInfo = [
     {
+        ticketId: '',
         name: '',
         gender: '',
         identity: '',
@@ -31,7 +21,8 @@ const orderInfo = [
         visit_date: '',
         adultTicket: 0,
         childTicket: 0,
-        elderlyTicket: 0
+        elderlyTicket: 0,
+        purchase_time: ''
     }
 ];
 
@@ -109,9 +100,8 @@ async function sendLineNotify(message) {
 app.post('/create-payment', async (req, res) => {
 
         try {
-        orderInfo.value = req.body.orderInfo;
-        amount = req.body.amount;
-        console.log('orderInfo:', orderInfo.value);
+
+
 
 
 
@@ -123,6 +113,12 @@ app.post('/create-payment', async (req, res) => {
         const nonce = Date.now().toString();// 產生一個隨機數
         const requestUrl = '/v3/payments/request';// 請求路徑
         const orderId = `${Date.now()}`;// 訂單編號
+
+            //處理回傳的資料
+            req.body.orderInfo.ticketId = orderId;
+            orderInfo.value = req.body.orderInfo;
+            amount = req.body.amount;
+            console.log('orderInfo:', orderInfo.value);
 
         const requestBody = {
             orderInfo,
@@ -184,6 +180,7 @@ app.post('/create-payment', async (req, res) => {
 
 
 // 儲存票券資訊（創建訂單時）
+/*
 app.post('/save-ticket-info', async (req, res) => {
     try {
 
@@ -214,12 +211,18 @@ app.post('/save-ticket-info', async (req, res) => {
         });
     }
 });
+*/
 
 
 
 app.get('/confirm', async (req, res) => {
     try {
         const { transactionId, orderId, amount } = req.query;
+
+        //將回傳的資料存到資料庫
+        const datasend = await axios.post('http://localhost:5001/api/data/ticket', orderInfo.value);
+        console.log('資料庫回傳:', datasend.data);
+
         console.log('接收到付款確認請求:', { transactionId, orderId, amount });
         const nonce = Date.now().toString();
         const requestUrl = `/v3/payments/${transactionId}/confirm`;
@@ -258,7 +261,6 @@ app.get('/confirm', async (req, res) => {
             await sendLineNotify(notifyMessage);
         }
 
-        saveTicketInfo.push(orderInfo);
 
         // 回傳成功給前端
         res.json({
@@ -270,7 +272,7 @@ app.get('/confirm', async (req, res) => {
         });
 
         console.log(response.data);
-        await sendToMongo();
+
 
     } catch (error) {
         console.error('確認付款時發生錯誤:', error.response?.data || error.message);
@@ -283,5 +285,5 @@ app.get('/confirm', async (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
+    console.log(`LineServe is running on http://localhost:${port}`);
 });

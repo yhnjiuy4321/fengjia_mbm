@@ -46,6 +46,9 @@ const gotoSearchTicket = () => {
   router.push('/homepage/searchTicket')
 }
 
+const gotobio = () => {
+  router.push('/homepage/bioIdentiy')
+}
 
 
 
@@ -104,7 +107,7 @@ const gotoSearchTicket = () => {
         </li>
 
         <li class="nav-item bg-primary">
-          <a class="nav-link" href="#">互動專區</a>
+          <a class="nav-link" href="#" @click="gotobio">互動專區</a>
         </li>
       </ul>
     </div>

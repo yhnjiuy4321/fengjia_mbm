@@ -4,9 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"npm run dev:server1\" \"npm run dev:server2\" \"vite\"",
+    "dev": "concurrently \"npm run dev:server1\" \"npm run dev:server2\" \"npm run dev:server3\" \"vite\"",
     "dev:server1": "node Backend/LineServe.js",
     "dev:server2": "node Backend/serve.js",
+    "dev:server3": "node Backend/BioServe.js",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -16,9 +17,11 @@
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "express": "^4.21.1",
+    "google-auth-library": "^9.15.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.10.0",
     "mongoose": "^8.8.1",
+    "node-fetch": "^3.3.2",
     "vue": "^3.5.12",
     "vue-router": "^4.0.13"
   },

@@ -113,7 +113,7 @@ app.post('/api/data/ticket', async (req, res) => {
 app.delete('/api/data/ticket/:ticketId', async (req, res) => {
     const ticketId = req.params.ticketId;
     try {
-        const data = await TicketModel.deleteOne({ identity: ticketId });
+        const data = await TicketModel.deleteOne({ ticketId: ticketId });
         res.json(data);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -121,11 +121,11 @@ app.delete('/api/data/ticket/:ticketId', async (req, res) => {
 });
 
 
-// API查詢票務資料(用電話或身分證)
-app.get('/api/data/ticket/:phoneOrIdentity', async (req, res) => {
-    const phoneOrIdentity = req.params.phoneOrIdentity;
+// API查詢票務資料(用電話或身分證或訂單編號)
+app.get('/api/data/ticket/:phoneOrIdentityOrTicketId', async (req, res) => {
+    const phoneOrIdentityOrTicketId = req.params.phoneOrIdentityOrTicketId;
     try {
-        const data = await TicketModel.find({ $or: [{ phone: phoneOrIdentity }, { identity: phoneOrIdentity }] });
+        const data = await TicketModel.find({ $or: [{ phone: phoneOrIdentityOrTicketId }, { identity: phoneOrIdentityOrTicketId },{ticketId: phoneOrIdentityOrTicketId}] });
         res.json(data);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -185,7 +185,7 @@ const PORT = process.env.PORT || 5001;
 
 // 啟動服務
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server(forMongoDB) is running on http://localhost:${PORT}`);
 });
 
 mongoose.connection.on('error', err => {

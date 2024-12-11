@@ -58,6 +58,38 @@ async function fetchTickets() {
   }
 }
 
+const theOneData = ref({
+  ticketId: '',
+  name: '',
+  gender: '',
+  identity: '',
+  phone: '',
+  visit_date: '',
+  purchase_time: '',
+  adultTicket: 0,
+  childTicket: 0,
+  elderlyTicket: 0
+})
+
+
+
+//抓取特定資料(抓ticketId)
+async function fetchOne(ticketId) {
+  try {
+    const response = await axios.get(`http://localhost:${post}/api/data/ticket/${ticketId}`)
+
+    //將日期格式化
+    response.data[0].visit_date = new Date(response.data[0].visit_date).toLocaleDateString()
+    response.data[0].purchase_time = new Date(response.data[0].purchase_time).toLocaleDateString()
+
+    theOneData.value = response.data[0]
+
+    console.log('ticket:', tickets.value)
+  } catch (error) {
+    console.error('Error fetching ticket data:', error)
+  }
+}
+
 
 //刪除資料(抓ticketId)
 async function deleteItem(ticketId) {
@@ -189,7 +221,7 @@ onMounted(() => {
           <td>{{ticket.gender}}</td>
           <td>
           <div class="d-flex">
-            <button class="btn btn-info w-100 m-1" data-bs-toggle="modal" data-bs-target="#profileModal" title="查看"><i class="fas fa-eye"></i></button>
+            <button class="btn btn-info w-100 m-1" data-bs-toggle="modal" data-bs-target="#profileModal" title="查看" @click="fetchOne(ticket.ticketId)"><i class="fas fa-eye"></i></button>
         <!--<button class="btn btn-primary w-100 m-1" data-bs-toggle="tooltip" title="編輯"><i class="fas fa-edit"></i></button>-->
             <button class="btn btn-danger w-100 m-1" data-bs-toggle="tooltip" title="刪除" @click="deleteItem(ticket.ticketId)"><i class="fas fa-trash-alt"></i></button>
           </div>
@@ -203,7 +235,7 @@ onMounted(() => {
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                  <h4 class="modal-title">編號 {{ticket.ticketId}} 的詳細資料</h4>
+                  <h4 class="modal-title">編號 {{theOneData.ticketId}} 的詳細資料</h4>
                   <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
@@ -211,16 +243,15 @@ onMounted(() => {
                 <div class="modal-body">
                   <div class="d-flex">
                     <div class="w-100">
-                      <p>姓名: {{ticket.name}}</p>
-                      <p>性別: {{ticket.gender}}</p>
-                      <p>身分證: {{ticket.identity}}</p>
-                      <p>電話: {{ticket.phone}}</p>
-                      <p>信箱: {{ticket.email}}</p>
-                      <p>參觀日期: {{ticket.visit_date}}</p>
-                      <p>購票日期: {{ticket.purchase_time}}</p>
-                      <p>全票: {{ticket.adultTicket}} 張</p>
-                      <p>兒童票: {{ticket.childTicket}} 張</p>
-                      <p>敬老票: {{ticket.elderlyTicket}} 張</p>
+                      <p>姓名: {{theOneData.name}}</p>
+                      <p>性別: {{theOneData.gender}}</p>
+                      <p>身分證: {{theOneData.identity}}</p>
+                      <p>電話: {{theOneData.phone}}</p>
+                      <p>參觀日期: {{theOneData.visit_date}}</p>
+                      <p>購票日期: {{theOneData.purchase_time}}</p>
+                      <p>全票: {{theOneData.adultTicket}} 張</p>
+                      <p>兒童票: {{theOneData.childTicket}} 張</p>
+                      <p>敬老票: {{theOneData.elderlyTicket}} 張</p>
                     </div>
                   </div>
                 </div>

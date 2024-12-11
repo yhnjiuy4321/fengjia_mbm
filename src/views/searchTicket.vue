@@ -30,6 +30,11 @@ function searchGo() {
         //把visit_date和purchase_time轉換成日期格式
         ticket.value.visit_date = new Date(ticket.value.visit_date).toLocaleDateString()
         ticket.value.purchase_time = new Date(ticket.value.purchase_time).toLocaleDateString()
+
+        //總金額
+        ticket.value.totalPrice = ticket.value.adultTicket * 300 + ticket.value.childTicket * 150 + ticket.value.elderlyTicket * 130
+
+
         // Show the modal
         //抓取modal的id
         const modal = new bootstrap.Modal(document.getElementById('haveSearch'), { backdrop: true })
@@ -77,7 +82,7 @@ function searchGo() {
       </div>
 
       <div class="searchBox d-grid ">
-          <input type="text" placeholder="請輸入手機號碼或身分證" v-model="userInput"  class="w-100 p-3 mb-5">
+          <input type="text" placeholder="請輸入手機號碼、身分證、訂單編號（三擇一）" v-model="userInput"  class="w-100 p-3 mb-5">
           <button class="btn btn-primary p-3 w-50"  type="button"  @click="searchGo" data-bs-toggle="modal">查詢</button>
       </div>
 
@@ -101,15 +106,13 @@ function searchGo() {
           <div class="result">
             <p>您的訂票資訊如下：</p>
             <p>姓名: {{ticket.name}}</p>
-            <p>性別: {{ticket.gender}}</p>
             <p>電話: {{ticket.phone}}</p>
-            <p>身分證: {{ticket.identity}}</p>
-            <p>信箱: {{ticket.email}}</p>
             <p>參觀日期: {{ticket.visit_date}}</p>
             <p>購票日期: {{ticket.purchase_time}}</p>
             <p>全票: {{ticket.adultTicket}}張</p>
             <p>兒童票: {{ticket.childTicket}}張</p>
             <p>敬老票: {{ticket.elderlyTicket}}張</p>
+            <p>總金額: {{ticket.totalPrice}}元</p>
           </div>
         </div>
 
@@ -151,7 +154,8 @@ function searchGo() {
 <style scoped>
 
 .container{
-  border: black 1px solid;
+
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
 }
 
 .searchBox{
