@@ -101,11 +101,6 @@ app.post('/create-payment', async (req, res) => {
 
         try {
 
-
-
-
-
-
         if (!amount || amount <= 0) {
             return res.status(400).json({ error: 'Invalid amount', message: '金額無效' });
         }

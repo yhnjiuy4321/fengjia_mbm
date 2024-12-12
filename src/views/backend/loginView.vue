@@ -12,6 +12,7 @@ const token = localStorage.getItem('stayToken');//取得token
 const enter = async () => {
   try {
     await login(account.value, password.value)
+    localStorage.setItem('token', 'your-token-here');//將token存入localStorage
     alert('登入成功')
     await router.push('/backend/login/ticketManagement')
     //console.log該帳號的資料

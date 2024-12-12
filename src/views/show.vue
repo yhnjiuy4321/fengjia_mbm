@@ -75,6 +75,8 @@ const forShow = ref(showContent)
 
 img {
   border-radius: 10px;
+  width: 600px;
+  height: 400px;
 }
 
 .timeContent{

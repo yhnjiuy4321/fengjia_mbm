@@ -162,7 +162,7 @@ const forWhale = ref(whaleContent)
             <div class="row">
               <div v-for="iceItem in forIce" :key="iceItem.id" class="col-md-6 mb-4 w-100">
                 <div class="d-flex border p-3 rounded">
-                  <img :src="iceItem.photo" alt="極地世界" class="rounded me-3 w-50 h-50">
+                  <img :src="iceItem.photo" alt="極地世界" class="rounded me-3">
                   <div>
                     <h5>名稱：{{ iceItem.name }}</h5>
                     <p>學名：{{ iceItem.sciName }}</p>
@@ -183,7 +183,7 @@ const forWhale = ref(whaleContent)
 
               <div v-for="whaleItem in forWhale" :key="whaleItem.id" class="col-md-6 mb-4 w-100">
                 <div class="d-flex border p-3 rounded">
-                  <img :src="whaleItem.photo" alt="鯨魚世界" class="rounded me-3 w-50 h-50">
+                  <img :src="whaleItem.photo" alt="鯨魚世界" class="rounded me-3">
                   <div>
                     <h5>名稱：{{ whaleItem.name }}</h5>
                     <p>學名：{{ whaleItem.sciName }}</p>
@@ -205,5 +205,10 @@ const forWhale = ref(whaleContent)
 </template>
 
 <style scoped>
+
+img{
+  width: 250px;
+  height: 200px;
+}
 
 </style>

@@ -120,13 +120,12 @@ export default router;
 
 //路由守衛，判斷是否登入，若未登入則導向登入頁面
 router.beforeEach((to, from, next) => {
-    if (!token) { //條件：需要登入、未登入、沒有token
+    const token = localStorage.getItem('token'); // 確認 token 的檢索方式
+    if (to.matched.some(record => record.meta.requiresAuth) && !token) { // 未登入且需要驗證
         authState.isAuthenticated = false;
-        next('/backend/login');
-
-    //若已登入，則放行，就算重新整理也不會跳回登入頁面
-    } else {
+        next('/backend/login'); // 重導至登入頁
+    } else { // 已登入或不需要驗證
         authState.isAuthenticated = true;
-        next(); //放行
+        next(); // 放行
     }
 });

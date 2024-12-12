@@ -8,8 +8,8 @@ export const showContent = [
             { id: 1, time: '10:00' },
             { id: 2, time: '14:00' }
         ],
-        Location: 'Main Pool',
-        photo: 'https://picsum.photos/600/400'
+        Location: '淺海區',
+        photo: '/src/assets/photo/show/pJyanqOdlp6ep6U.jpg'
     },
     {
         id: 2,
@@ -21,8 +21,8 @@ export const showContent = [
             { id: 2, time: '13:00' },
             { id: 3, time: '15:00' }
         ],
-        Location: 'Penguin Habitat',
-        photo: 'https://picsum.photos/600/400'
+        Location: '極地世界區',
+        photo: '/src/assets/photo/show/pinshow.jpg'
     },
     {
         id: 3,
@@ -32,8 +32,8 @@ export const showContent = [
         Time: [
             { id: 1, time: '18:00' }
         ],
-        Location: 'Jellyfish Gallery',
-        photo: 'https://picsum.photos/600/400'
+        Location: '深海區',
+        photo: '/src/assets/photo/show/watermom.png'
     },
     {
         id: 4,
@@ -44,8 +44,8 @@ export const showContent = [
             { id: 1, time: '12:00' },
             { id: 2, time: '16:00' }
         ],
-        Location: 'Shark Tank',
-        photo: 'https://picsum.photos/600/400'
+        Location: '淺海區',
+        photo: '/src/assets/photo/show/sharkEat.jpg'
     },
     {
         id: 5,
@@ -57,7 +57,18 @@ export const showContent = [
             { id: 2, time: '13:30' },
             { id: 3, time: '17:30' }
         ],
-        Location: 'Coral Reef Exhibit',
-        photo: 'https://picsum.photos/600/400'
+        Location: '淺海區',
+        photo: '/src/assets/photo/show/sanhujiaw.jpg'
+    },
+    {
+        id: 6,
+        title: '海豚表演',
+        intro: '在這場驚心動魄的海豚表演中，您將見識到海豚如何利用它們極高的智力和靈活的身體，展現高超的跳水技巧，感受海洋力量的震撼。',
+        Session: '1',
+        Time: [
+            { id: 1, time: '14:30' }
+        ],
+        Location: '淺海區',
+        photo: '/src/assets/photo/show/dophine.jpg'
     }
 ]
