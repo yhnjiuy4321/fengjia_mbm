@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import './assets/allWeb.css';
+//import './assets/allWeb.css';
 import App from './App.vue';
 import router from './router';
 import pagehead from './components/header.vue';

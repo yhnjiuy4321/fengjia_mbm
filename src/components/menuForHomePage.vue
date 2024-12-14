@@ -36,7 +36,7 @@ const menuList = menu
 <template>
   <div class="container w-100 h-100">
     <div>
-      <h1 class="text-center text-white mt-3">功能列表</h1>
+      <h1 class="text-center text-white mt-3 fw-bold">功能列表</h1>
     </div>
     <div  v-for=" menuItem in menuList"class="row d-flex justify-content-center">
 

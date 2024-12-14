@@ -11,6 +11,7 @@ const forShow = ref(showContent)
 </script>
 
 <template>
+  <div class="box">
 
   <pagehead/>
   <carouselComponent/>
@@ -19,14 +20,14 @@ const forShow = ref(showContent)
     <menuComponent/>
 
     <div class="show_container d-grid w-100">
-      <div class="show_title p-4 text-center">
-        <h2>【每日表演活動】</h2>
+      <div class="show_title p-4 text-center fw-bold">
+        <span>【每日表演活動】</span>
       </div>
 
       <div  v-for="item in forShow" :key="item.id" class="show_content justify-center p-4">
         <div class="photo">
           <img :src="item.photo" alt="...">
-          <div class="info w-10">
+          <div class="info w-10 fw-bold">
             <h2>{{item.title}}</h2>
             <p>{{item.intro}}</p>
             <br>
@@ -48,9 +49,26 @@ const forShow = ref(showContent)
   </div>
 
   <pagefooter/>
+
+  </div>
 </template>
 
 <style scoped>
+
+.box{
+  background: url('/src/assets/photo/sea1.jpg') no-repeat center center fixed;
+}
+
+.show_title span{
+  color: #000000;
+  font-size: 40px;
+  background-color: rgba(31, 185, 46, 0.64);
+  border-radius: 15px;
+}
+
+
+
+
 
 .photo{
   position: relative;
@@ -61,7 +79,7 @@ const forShow = ref(showContent)
     position: absolute;
     top: 20px;
     left: 500px;
-    background-color: rgba(227, 209, 209, 0.90); /* 半透明背景 */
+    background-color: rgba(31, 185, 162, 0.9); /* 半透明背景 */
     color: #000000;
     padding: 35px;
     width: 40%;

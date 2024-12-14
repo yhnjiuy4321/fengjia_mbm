@@ -5,8 +5,8 @@ const media = mediaContent;
 
 <template>
 
-  <div class="container w-100 bg-primary p-2">
-    <h1 class="text-center ml-3 mr-3">媒體影音</h1>
+  <div class="container w-100  p-2">
+    <h1 class="text-center ml-3 mr-3 fw-bold">媒體影音</h1>
     <div v-for=" item  in media" class="box d-flex justify-content-around">
 
 
@@ -39,6 +39,10 @@ const media = mediaContent;
 </template>
 
 <style scoped>
+
+.container {
+  background: url('/src/assets/photo/sea1.jpg') no-repeat center center fixed
+}
 
 .video {
   width: 80%;

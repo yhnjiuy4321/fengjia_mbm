@@ -133,7 +133,7 @@ const gotobio = () => {
     padding-top: 1rem;
     padding-bottom: 1rem;
     border-radius: 10px;
-    background-color: rgba(115, 183, 255, 0.5);
+    background-color: rgba(115, 183, 255, 0.7);
     justify-content: center;
     align-content: center;
   }
@@ -173,7 +173,7 @@ const gotobio = () => {
   .whatYouChoose {
 
     font-size: 36px;
-    color: #ffffff;
+    color: #101b57;
     font-weight: 600;
     padding: 12px;
     background: #77b2ef;

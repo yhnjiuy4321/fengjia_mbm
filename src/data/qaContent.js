@@ -1,56 +1,56 @@
 export const Qa_venue = [
     {
         id: 1,
-        question: "What is the capital of France?",
-        answer: "Paris",
+        question: "海生館有年票嗎？",
+        answer: "我們提供年票，持年票可在一年內不限次數入館，還能享有商店及餐飲折扣。",
     },
     {
         id: 2,
-        question: "What is the capital of Spain?",
-        answer: "Madrid",
+        question: "是否提供寄物服務？",
+        answer: "有提供寄物櫃，位於入口處，收費根據寄物櫃大小而定。",
     },
     {
         id: 3,
-        question: "What is the capital of Italy?",
-        answer: "Rome",
+        question: "有適合幼兒的設施嗎？",
+        answer: "我們提供兒童遊戲區及母嬰室，讓家庭參觀更加方便。",
     },
     {
         id: 4,
-        question: "What is the capital of Germany?",
-        answer: "Berlin",
+        question: "館內是否有導覽服務？",
+        answer: "有提供定時導覽服務，並可提前預約專人導覽。語音導覽設備也可供租用。",
     },
     {
         id: 5,
-        question: "What is the capital of the United Kingdom?",
-        answer: "London",
+        question: "學校團體參觀是否有導覽或特別活動？",
+        answer: "我們為學校團體提供專屬導覽及教育活動，需至少提前一週預約，可聯繫安排。",
     }
 ]
 
 export const Qa_bio = [
     {
         id: 1,
-        question: "Who is the first president of the United States?",
-        answer: "George Washington",
+        question: "館內的生物來自哪裡？",
+        answer: "我們的生物來自世界各地的海洋生態系，部分為人工繁殖，並積極參與野生動物保育。",
     },
     {
         id: 2,
-        question: "Who is the first prime minister of the United Kingdom?",
-        answer: "Robert Walpole",
+        question: "鯊魚會吃同缸的其他魚類嗎？",
+        answer: "不會。我們餵鯊魚充足的食物，減少其捕食行為，同時缸內設計也讓其他魚類有躲避空間。",
     },
     {
         id: 3,
-        question: "Who is the first president of the Philippines?",
-        answer: "Emilio Aguinaldo",
+        question: "為什麼水母不會被牠自己的毒刺刺傷？",
+        answer: "水母的體表有特殊構造，可以避免毒刺自傷，同時牠們的毒液主要針對捕食對象生效。",
     },
     {
         id: 4,
-        question: "Who is the first president of the Republic of China?",
-        answer: "Sun Yat-sen",
+        question: "館內最大的生物是哪一種？",
+        answer: "館內展示的最大生物是某些種類的鯊魚，如虎鯊或沙虎鯊，長度可超過3公尺。",
     },
     {
         id: 5,
-        question: "Who is the first president of the Russian Federation?",
-        answer: "Boris Yeltsin",
+        question: "為什麼企鵝不怕冷？",
+        answer: "企鵝的羽毛緊密且防水，加上厚厚的脂肪層，可以隔絕低溫，幫助牠們適應極地環境。",
     }
 ]
 

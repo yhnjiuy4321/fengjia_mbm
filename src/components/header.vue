@@ -3,7 +3,7 @@
 
 <template>
   <header class="header">
-      <img src="../assets/logo.svg" alt="logo" />
+      <img src="/logonNoBg1.png" alt="logo" />
     <div class="site-name" @click=gohome()>
      <span class="chineseName  text-center">逢甲海洋生物博物館</span>
       <span class="engName  text-center">Feng Chia Marine Biology Museum</span>
@@ -22,7 +22,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 20px;
-  background-color: #0314b1;
+  background-color: #4c79a6;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* 陰影效果 */
   position: fixed; /* 固定在網頁最上方 */
   z-index: 1000; /* 確保在其他元素之上 */
@@ -34,19 +34,7 @@
 
 .site-name {
   justify-content: left;
-  margin: auto;
   cursor: pointer;
-}
-
-
-.header img {
-  width: 30px;
-  height: auto;
-  margin-right: 10px;
-}
-
-
-.site-name {
   flex: 1;
   text-align:left;
   margin: 0;
@@ -54,6 +42,20 @@
   color: #ced4da;
   display: grid;
 }
+
+.chineseName {
+  font-weight: bold;
+}
+
+
+.header img {
+  width: 70px;
+  height: auto;
+  margin-right: 10px;
+}
+
+
+
 
 .engName {
   font-size: 13px;
@@ -78,6 +80,9 @@
   background-color: rgba(115, 183, 255, 0.8);
 }
 
+body {
+  background: #ffd500;
+}
 
 
 

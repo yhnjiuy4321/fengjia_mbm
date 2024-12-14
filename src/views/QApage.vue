@@ -26,11 +26,12 @@ const questions_bio = ref(Qa_bio);
 </script>
 
 <template>
+  <div class="box">
 
 <pagehead/>
 <carouselComponent/>
 
-  <div class="d-flex mt-5">
+  <div class="d-flex w-100 m-0 mt-5 ">
     <menuComponent/>
 
     <div class="question m-3 w-50">
@@ -50,11 +51,11 @@ const questions_bio = ref(Qa_bio);
       <!--場館問題-->
       <div class="Aquarium_question">
         <div v-for="item in questions_venue" :key="item.id" class="question_content  w-100 p-2">
-          <div class="question">
-            <h2>Q:{{item.question}}</h2>
+          <div class="question mt-2">
+            <h2>Q : {{item.question}}</h2>
           </div>
           <div class="answer">
-            <p class="text-end">A:{{item.answer}}</p>
+            <p class="text-start">A : {{item.answer}}</p>
           </div>
         </div>
       </div>
@@ -62,11 +63,11 @@ const questions_bio = ref(Qa_bio);
       <!--生物問題-->
       <div class="bio_question">
         <div v-for="item in questions_bio" :key="item.id"  class="question_content  w-100 p-2">
-          <div class="question">
-            <h2>Q:{{item.question}}</h2>
+          <div class="question mt-2">
+            <h2>Q : {{item.question}}</h2>
           </div>
           <div class="answer">
-            <p class="text-end">A:{{item.answer}}</p>
+            <p class="text-start">A : {{item.answer}}</p>
           </div>
         </div>
       </div>
@@ -76,13 +77,22 @@ const questions_bio = ref(Qa_bio);
 
   <pagefooter/>
 
+  </div>
+
 </template>
 
 <style scoped>
 
+
+.box {
+  background: url('/src/assets/photo/sea1.jpg') no-repeat center center fixed;
+}
+
 .question_content{
-  background-color: #77b2ef;
-  border: #2c3e50 2px solid;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: #2c3e50 1px solid;
+  margin-bottom: 10px;
+  border-radius: 10px;
 }
 
 
@@ -120,6 +130,10 @@ const questions_bio = ref(Qa_bio);
 
 .bio_question {
   display: none;
+}
+
+.answer{
+  margin-top: 40px;
 }
 
 </style>

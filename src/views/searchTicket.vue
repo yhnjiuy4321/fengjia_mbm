@@ -16,6 +16,11 @@ const ticket = ref({})
 
 
 function searchGo() {
+
+  if (userInput.value === '') {
+    console.error('No input')
+    alert('請輸入搜尋條件')
+  }else {
   axios.get(`http://localhost:5001/api/data/ticket/${userInput.value}`)
     .then(response => {
       if (response.data.length === 0) {
@@ -45,27 +50,7 @@ function searchGo() {
       console.error('Error fetching ticket data:', error)
     })
 }
-
-
-
-
-/*const searchGo = async () => {
-  try {
-    const response = await axios.get(`http://localhost:5001/api/data/ticket/${userInput.value}`)
-    if (response.data.length === 0) {
-      console.error('No ticket found')
-    } else {
-      ticket.value = response.data[0]
-      console.log('ticket:', ticket.value)
-      // Show the modal
-
-    }
-  } catch (error) {
-    console.error('Error fetching ticket data:', error)
-    // Show the modal
-
-  }
-}*/
+}
 </script>
 
 <template>

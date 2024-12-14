@@ -11,6 +11,7 @@ window.scrollTo(0,0);
 </script>
 
 <template>
+  <div class="home-container">
 
   <pagehead/>
   <carouselComponent/>
@@ -21,8 +22,14 @@ window.scrollTo(0,0);
 
   <pagefooter/>
 
+  </div>
+
 </template>
 
 <style scoped>
+
+.home-container{
+  background: url('public/fish.jpg') no-repeat center center fixed
+}
 
 </style>
