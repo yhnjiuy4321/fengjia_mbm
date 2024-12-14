@@ -52,7 +52,7 @@ export const iceContent = [
             name: '雪海燕',
             sciName: 'Pagodroma nivea',
             photo: '/src/assets/photo/ice/snowBird.jpg',
-            class: '脊索動物門 > 鳥綱 > 鹱形目 > 海燕科',
+            class: '脊索動物門 > 鳥綱 > 鸌形目 > 海燕科',
             content: '雪海燕是極地地區特有的海鳥，通過長距離飛行捕食磷蝦和小型魚類。牠們能在冰雪覆蓋的環境中築巢，是極地環境的重要指標物種。'
         },
         {

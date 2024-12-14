@@ -3,46 +3,19 @@ import pagehead from '@/components/header.vue'
 import pagefooter from '@/components/footer.vue'
 import carouselComponent from '@/components/carousel.vue'
 import menuComponent from '@/components/menu.vue'
-import { bioContent } from "@/data/bioContent.js";
+import { marineTranslations } from '@/data/bioResult.js'
+
+window.scrollTo(0,0);//來到此頁面時，將滾動條移動到最上方
 
 import { ref } from "vue";
 
 const PORT = 5002
-const bio = ref(bioContent);
-
 const imageFile = ref(null)
 const imagePreview = ref(null)
 const loading = ref(false)
 const error = ref(null)
 const results = ref(null)
 
-const marineTranslations = {
-  'Dolphin': '海豚 🐬',
-  'Whale': '鯨魚 🐋',
-  'Seal': '海豹 🦭',
-  'Sea lion': '海獅',
-  'Otter': '水獺',
-  'Fish': '魚 🐠',
-  'Clownfish': '小丑魚',
-  'Shark': '鯊魚 🦈',
-  'Blue tang': '藍雀鯛',
-  'Seahorse': '海馬',
-  'Starfish': '海星 ⭐',
-  'Stingray': '魟魚',
-  'Octopus': '章魚 🐙',
-  'Jellyfish': '水母',
-  'Turtle': '海龜 🐢',
-  'Crab': '螃蟹 🦀',
-  'Penguin': '企鵝 🐧',
-  'Ocean': '海洋 🌊',
-  'Sea': '大海 🌊',
-  'Coral': '珊瑚 🪸',
-  'Seaweed': '海藻',
-  'Marine life': '海洋生物',
-  'Marine mammal': '海洋哺乳類',
-  'Marine biology': '海洋生物',
-  'Aquatic': '水生生物'
-}
 
 const handleFileUpload = (event) => {
   const file = event.target.files[0]
@@ -120,15 +93,11 @@ const getBase64 = (file) => {
 
     <div class="w-100 p-4">
 
-      <div class=" title ">
-        <h1>【圖片上傳注意事項】</h1>
+      <div class=" infoPhoto ">
+        <img src="/src/assets/photo/ThingForBio.png">
       </div>
 
-      <div v-for="item in bio" :key="item.id" class="content">
-        <div class="content_text">
-          <p>{{item.id}}.{{item.rule}}</p>
-        </div>
-      </div>
+
 
       <div class="vision-analyzer">
         <div class="upload-section">
@@ -146,25 +115,20 @@ const getBase64 = (file) => {
           <h3>🌊 海洋生物辨識結果 🌊</h3>
           <div v-if="results.labelAnnotations">
             <!-- 顯示第一個標籤作為學名 -->
-            <div v-if="results.labelAnnotations[0]" class="scientific-name">
-              學名: {{ results.labelAnnotations[0].description }}
+            <div class="scientific-name">
+              {{ marineTranslations[results.labelAnnotations[0].description] || results.labelAnnotations[0].description }}
             </div>
 
             <!-- 只顯示可信度高的結果 -->
-            <ul class="marine-list">
+            <ul class="marine-list mt-5">
+              <h3>其他參考結果：</h3>
               <template v-for="label in results.labelAnnotations" :key="label.description">
-                <li v-if="label.score >= 0.95" class="marine-item">
-                  {{ label.description }} ({{ Math.round(label.score * 100) }}%)
+                <li v-if="label.score >= 0.9" class="marine-item">
+                  {{ marineTranslations[label.description] || label.description }} ({{ Math.round(label.score * 100) }}%)
                 </li>
               </template>
             </ul>
           </div>
-
-          <div v-if="results.textAnnotations">
-            <h4>文字識别:</h4>
-            <p>{{ results.textAnnotations[0]?.description || '未檢測到文字' }}</p>
-          </div>
-
         </div>
       </div>
 
@@ -176,6 +140,17 @@ const getBase64 = (file) => {
 </template>
 
 <style scoped>
+
+.infoPhoto {
+  text-align: center;
+  margin: 20px 0;
+}
+
+
+.infoPhoto img{
+  width: 80%;
+  border-radius: 15px;
+}
 
 .vision-analyzer {
   max-width: 800px;

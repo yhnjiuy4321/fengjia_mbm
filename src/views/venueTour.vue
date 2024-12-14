@@ -17,6 +17,7 @@ const forShallow = ref(shallowContent)
 const forIce = ref(iceContent)
 const forWhale = ref(whaleContent)
 
+window.scrollTo(0,0);//來到此頁面時，將滾動條移動到最上方
 
 
 </script>
@@ -126,7 +127,7 @@ const forWhale = ref(whaleContent)
                   <div>
                     <h5>名稱：{{ deepItem.name }}</h5>
                     <p>學名：{{ deepItem.sciName }}</p>
-                    <p>分類:{{ deepItem.class }}</p>
+                    <p>分類：{{ deepItem.class }}</p>
                     <p>介紹：{{ deepItem.content }}</p>
                   </div>
                 </div>
@@ -146,7 +147,7 @@ const forWhale = ref(whaleContent)
                   <div>
                     <h5>名稱：{{ shallowItem.name }}</h5>
                     <p>學名：{{ shallowItem.sciName }}</p>
-                    <p>分類:{{ shallowItem.class }}</p>
+                    <p>分類：{{ shallowItem.class }}</p>
                     <p>介紹：{{ shallowItem.content }}</p>
                   </div>
                 </div>
@@ -166,7 +167,7 @@ const forWhale = ref(whaleContent)
                   <div>
                     <h5>名稱：{{ iceItem.name }}</h5>
                     <p>學名：{{ iceItem.sciName }}</p>
-                    <p>分類:{{ iceItem.class }}</p>
+                    <p>分類：{{ iceItem.class }}</p>
                     <p>介紹：{{ iceItem.content }}</p>
                   </div>
                 </div>
@@ -187,7 +188,7 @@ const forWhale = ref(whaleContent)
                   <div>
                     <h5>名稱：{{ whaleItem.name }}</h5>
                     <p>學名：{{ whaleItem.sciName }}</p>
-                    <p>分類:{{ whaleItem.class }}</p>
+                    <p>分類：{{ whaleItem.class }}</p>
                     <p>介紹：{{ whaleItem.content }}</p>
                   </div>
                 </div>

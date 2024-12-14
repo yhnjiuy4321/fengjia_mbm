@@ -9,7 +9,7 @@
     逢甲海洋生物博物館 | Feng Chia Marine Biology Museum
     </div>
     <div style="color: white;">
-      電話：06-267840
+      電話：06-2678409
     </div>
     <div style="color: white;">
       Email：fcmbm1234@welcome.com
